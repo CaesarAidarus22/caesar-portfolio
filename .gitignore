@@ -5,3 +5,9 @@ node_modules
 .chrome-profile/
 .chrome-profile-projects/
 screenshots/
+.claude/
+.codex/
+.impeccable/
+tsconfig.tsbuildinfo
+DESIGN.md
+PRODUCT.md

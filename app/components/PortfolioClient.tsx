@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, Github, MessageCircle, Sparkles } from "lucide-react";
+import { ArrowUpRight, Github, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -257,10 +257,6 @@ function InteractiveMascot() {
           sizes="(min-width: 1024px) 120px, (min-width: 640px) 96px, 80px"
           className="ai-companion__image"
         />
-      </button>
-      <button type="button" className="ai-companion-cta" onClick={openChat}>
-        <MessageCircle size={15} aria-hidden="true" />
-        <span>Ask Caesar</span>
       </button>
     </div>
   );

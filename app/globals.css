@@ -755,36 +755,6 @@ a {
   transform: scale(1.045);
 }
 
-.ai-companion-cta {
-  display: inline-flex;
-  min-height: 2.55rem;
-  align-items: center;
-  gap: 0.45rem;
-  border: 1px solid rgba(127, 158, 201, 0.25);
-  border-radius: 999px;
-  background: rgba(9, 14, 21, 0.92);
-  padding: 0.58rem 0.78rem;
-  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.34);
-  color: #d5e0ed;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 0.7rem;
-  font-weight: 650;
-  transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
-}
-
-.ai-companion-cta:hover,
-.ai-companion-cta:focus-visible {
-  border-color: rgba(147, 184, 235, 0.52);
-  background: rgba(14, 22, 33, 0.98);
-  outline: none;
-  transform: translateY(-2px);
-}
-
-.ai-companion-cta:focus-visible {
-  box-shadow: 0 0 0 3px rgba(105, 151, 209, 0.2), 0 14px 38px rgba(0, 0, 0, 0.34);
-}
-
 .ai-companion-tooltip,
 .ai-companion-menu {
   position: absolute;
@@ -2956,15 +2926,6 @@ a.about-social__card:focus-visible .about-social__icon svg {
     height: 3.75rem;
   }
 
-  .ai-companion-cta {
-    width: 2.4rem;
-    min-height: 2.4rem;
-    justify-content: center;
-    padding: 0;
-  }
-
-  .ai-companion-cta span { display: none; }
-
   .ai-companion-tooltip {
     right: -0.15rem;
   }
@@ -3317,8 +3278,7 @@ a.about-social__card:focus-visible .about-social__icon svg {
   }
 
   .home-profile-card__photo,
-  .home-profile-card__hint,
-  .ai-companion-cta {
+  .home-profile-card__hint {
     transition: none;
   }
 
@@ -3917,8 +3877,7 @@ a.about-social__card:focus-visible .about-social__icon svg {
 @media (prefers-reduced-motion: reduce) {
   .ask-caesar-trigger,
   .ask-caesar-panel,
-  .ai-companion-shell,
-  .ai-companion-cta { transition: none; transform: none; }
+  .ai-companion-shell { transition: none; transform: none; }
 }
 
 /* Command palette */
