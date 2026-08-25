@@ -30,53 +30,62 @@ export default function JourneySection() {
   }, []);
 
   return (
-    <section id="experience" className="journey-section" aria-labelledby="journey-title">
-      <div className="journey-heading">
-        <p>Journey</p>
-        <h2 id="journey-title">Learning by building.</h2>
-        <span>
-          Perjalanan akademik, eksperimen teknis, dan project yang membuat setiap
-          ide menjadi lebih konkret.
-        </span>
+    <section id="experience" className="home-section home-section--journey journey-section" aria-labelledby="journey-title">
+      <div className="journey-atmosphere" aria-hidden="true">
+        <span className="journey-atmosphere__arc" />
+        <span className="journey-atmosphere__data-line" />
+        <span className="journey-atmosphere__intersection journey-atmosphere__intersection--one" />
+        <span className="journey-atmosphere__intersection journey-atmosphere__intersection--two" />
       </div>
 
-      <div className="journey-timeline">
-        <div className="journey-line" aria-hidden="true">
-          <span style={{ transform: `scaleY(${(activeIndex + 1) / journeyItems.length})` }} />
+      <div className="journey-container">
+        <div className="journey-heading">
+          <p>Journey</p>
+          <h2 id="journey-title">Learning by building.</h2>
+          <span>
+            Perjalanan akademik, eksperimen teknis, dan project yang membuat setiap
+            ide menjadi lebih konkret.
+          </span>
         </div>
 
-        {journeyItems.map((item, index) => (
-          <motion.article
-            key={item.period}
-            ref={(element) => { itemRefs.current[index] = element; }}
-            initial={reduceMotion ? false : { opacity: 0, y: 24, scale: 0.985 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, margin: "-12% 0px" }}
-            transition={{ duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
-            className={`journey-item ${activeIndex === index ? "journey-item--active" : ""}`}
-          >
-            <div className="journey-item__period">{item.period}</div>
-            <div className="journey-item__marker" aria-hidden="true"><span /></div>
-            <div className="journey-item__content">
-              <p>{item.type}</p>
-              <h3>{item.title}</h3>
-              <span>{item.description}</span>
-              <div className="journey-item__tech">
-                {item.technologies.map((technology) => <i key={technology}>{technology}</i>)}
+        <div className="journey-timeline">
+          <div className="journey-line" aria-hidden="true">
+            <span style={{ transform: `scaleY(${(activeIndex + 1) / journeyItems.length})` }} />
+          </div>
+
+          {journeyItems.map((item, index) => (
+            <motion.article
+              key={item.period}
+              ref={(element) => { itemRefs.current[index] = element; }}
+              initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-12% 0px" }}
+              transition={{ duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
+              className={`journey-item journey-item--accent-${index + 1} ${activeIndex === index ? "journey-item--active" : ""}`}
+            >
+              <div className="journey-item__period">{item.period}</div>
+              <div className="journey-item__marker" aria-hidden="true"><span /></div>
+              <div className="journey-item__content">
+                <p>{item.type}</p>
+                <h3>{item.title}</h3>
+                <span>{item.description}</span>
+                <div className="journey-item__tech">
+                  {item.technologies.map((technology) => <i key={technology}>{technology}</i>)}
+                </div>
+                <div className="journey-item__projects">
+                  {item.projectSlugs.map((slug) => {
+                    const project = getProject(slug);
+                    return project ? (
+                      <Link key={slug} href={`/projects/${slug}`}>
+                        {project.shortTitle} <ArrowUpRight size={14} />
+                      </Link>
+                    ) : null;
+                  })}
+                </div>
               </div>
-              <div className="journey-item__projects">
-                {item.projectSlugs.map((slug) => {
-                  const project = getProject(slug);
-                  return project ? (
-                    <Link key={slug} href={`/projects/${slug}`}>
-                      {project.shortTitle} <ArrowUpRight size={14} />
-                    </Link>
-                  ) : null;
-                })}
-              </div>
-            </div>
-          </motion.article>
-        ))}
+            </motion.article>
+          ))}
+        </div>
       </div>
     </section>
   );

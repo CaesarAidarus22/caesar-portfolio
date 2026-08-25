@@ -1,10 +1,10 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, MessageCircle, Send, X } from "lucide-react";
+import { ArrowUpRight, Send, X } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState, type PointerEvent } from "react";
 import { generateResponse } from "@/lib/chatbot/generateResponse";
 import type { ChatAction, ChatContext, ChatLanguage, ChatLanguageMode } from "@/lib/chatbot/types";
 
@@ -57,8 +57,123 @@ const placeholders: Record<ChatLanguageMode, string> = {
   en: "Ask about projects, skills, or contact...",
 };
 
-export default function AskCaesar() {
+function AskCaesarLauncher({
+  onOpen,
+  reduceMotion,
+}: {
+  onOpen: () => void;
+  reduceMotion: boolean;
+}) {
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [topDocked, setTopDocked] = useState(false);
+  const pointerFrame = useRef<number | null>(null);
   const pathname = usePathname();
+  const needsMobileTopDock = pathname === "/about" || pathname.startsWith("/projects/");
+
+  useEffect(() => {
+    const mobileQuery = window.matchMedia("(max-width: 640px)");
+    const updateDock = () => {
+      setTopDocked(needsMobileTopDock && mobileQuery.matches && window.scrollY < 96);
+    };
+
+    updateDock();
+    window.addEventListener("scroll", updateDock, { passive: true });
+    mobileQuery.addEventListener("change", updateDock);
+
+    return () => {
+      window.removeEventListener("scroll", updateDock);
+      mobileQuery.removeEventListener("change", updateDock);
+    };
+  }, [needsMobileTopDock]);
+
+  useEffect(
+    () => () => {
+      if (pointerFrame.current !== null) {
+        window.cancelAnimationFrame(pointerFrame.current);
+      }
+    },
+    [],
+  );
+
+  const resetPosition = (launcher: HTMLDivElement) => {
+    launcher.style.setProperty("--mascot-x", "0px");
+    launcher.style.setProperty("--mascot-y", "0px");
+    launcher.style.setProperty("--mascot-rotate", "0deg");
+  };
+
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (reduceMotion || event.pointerType !== "mouse") {
+      return;
+    }
+
+    const launcher = event.currentTarget;
+    const rect = launcher.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const x = Math.max(-1, Math.min(1, (event.clientX - centerX) / 72));
+    const y = Math.max(-1, Math.min(1, (event.clientY - centerY) / 72));
+
+    if (pointerFrame.current !== null) {
+      window.cancelAnimationFrame(pointerFrame.current);
+    }
+
+    pointerFrame.current = window.requestAnimationFrame(() => {
+      launcher.style.setProperty("--mascot-x", `${x * 5}px`);
+      launcher.style.setProperty("--mascot-y", `${y * 4}px`);
+      launcher.style.setProperty("--mascot-rotate", `${x * 3.5}deg`);
+    });
+  };
+
+  return (
+    <div
+      className={`ai-companion-shell${topDocked ? " ai-companion-shell--top-docked" : ""}`}
+      onPointerMove={handlePointerMove}
+      onPointerEnter={() => setTooltipVisible(true)}
+      onPointerLeave={(event) => {
+        resetPosition(event.currentTarget);
+        setTooltipVisible(false);
+      }}
+    >
+      <AnimatePresence>
+        {tooltipVisible ? (
+          <motion.span
+            id="ask-caesar-launcher-tooltip"
+            role="tooltip"
+            initial={reduceMotion ? false : { opacity: 0, y: 6, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 4, scale: 0.98 }}
+            transition={{ duration: 0.16 }}
+            className="ai-companion-tooltip"
+          >
+            Ask Caesar
+          </motion.span>
+        ) : null}
+      </AnimatePresence>
+
+      <button
+        type="button"
+        aria-label="Open Ask Caesar"
+        aria-describedby={tooltipVisible ? "ask-caesar-launcher-tooltip" : undefined}
+        aria-expanded="false"
+        className="ai-companion ai-companion--interactive"
+        onClick={onOpen}
+        onFocus={() => setTooltipVisible(true)}
+        onBlur={() => setTooltipVisible(false)}
+      >
+        <span className="ai-companion__halo" aria-hidden="true" />
+        <Image
+          src="/images/caesar-mascot.png"
+          alt=""
+          fill
+          sizes="(min-width: 1024px) 96px, (min-width: 641px) 84px, 60px"
+          className="ai-companion__image"
+        />
+      </button>
+    </div>
+  );
+}
+
+export default function AskCaesar() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [mode, setMode] = useState<ChatLanguageMode>("auto");
@@ -133,10 +248,14 @@ export default function AskCaesar() {
 
   return (
     <>
-      {!open && pathname !== "/" ? (
-        <button type="button" className="ask-caesar-trigger" aria-label="Open Ask Caesar portfolio assistant" aria-expanded="false" onClick={() => setOpen(true)}>
-          <MessageCircle size={17} /> <span>Ask Caesar</span>
-        </button>
+      {!open ? (
+        <AskCaesarLauncher
+          onOpen={() => {
+            window.dispatchEvent(new Event("close-command-palette"));
+            setOpen(true);
+          }}
+          reduceMotion={Boolean(reduceMotion)}
+        />
       ) : null}
 
       <AnimatePresence>

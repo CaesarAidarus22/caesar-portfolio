@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { socialLinks } from "@/app/data/socialLinks";
 
 const navLinks = [
+  { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Projects", href: "/#projects" },
   { label: "GitHub", href: "/#github-activity" },
@@ -19,7 +20,20 @@ export default function SiteNavbar({ theme = "cool" }: { theme?: "cool" | "warm"
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [homeHash, setHomeHash] = useState("");
   const isAbout = pathname === "/about";
+
+  const activeLabel = (() => {
+    if (pathname === "/about") return "About";
+    if (pathname === "/projects" || pathname.startsWith("/projects/")) return "Projects";
+    if (pathname !== "/") return null;
+
+    if (homeHash === "#projects") return "Projects";
+    if (homeHash === "#github-activity") return "GitHub";
+    if (homeHash === "#experience") return "Journey";
+    if (homeHash === "#contact") return "Contact";
+    return "Home";
+  })();
 
   useEffect(() => {
     const update = () => setScrolled(window.scrollY > 20);
@@ -27,6 +41,13 @@ export default function SiteNavbar({ theme = "cool" }: { theme?: "cool" | "warm"
     window.addEventListener("scroll", update, { passive: true });
     return () => window.removeEventListener("scroll", update);
   }, []);
+
+  useEffect(() => {
+    const syncHash = () => setHomeHash(pathname === "/" ? window.location.hash : "");
+    syncHash();
+    window.addEventListener("hashchange", syncHash);
+    return () => window.removeEventListener("hashchange", syncHash);
+  }, [pathname]);
 
   return (
     <motion.header
@@ -46,14 +67,19 @@ export default function SiteNavbar({ theme = "cool" }: { theme?: "cool" | "warm"
           CAESAR
         </Link>
 
-        <div className="hidden items-center gap-7 md:flex">
+        <div className="hidden items-center gap-5 lg:gap-7 md:flex">
           {navLinks.map((link) => {
-            const active = link.label === "About" && isAbout;
+            const active = link.label === activeLabel;
+            const current = active
+              ? pathname === "/" && link.href.includes("#")
+                ? "location"
+                : "page"
+              : undefined;
             return (
               <Link
                 key={link.label}
                 href={link.href}
-                aria-current={active ? "page" : undefined}
+                aria-current={current}
                 className={`site-navbar__link ${active ? "site-navbar__link--active" : ""}`}
               >
                 {link.label}
@@ -96,12 +122,17 @@ export default function SiteNavbar({ theme = "cool" }: { theme?: "cool" | "warm"
         <div className={`site-navbar__mobile site-navbar__mobile--${theme} md:hidden`}>
           <div className="grid gap-1">
             {navLinks.map((link) => {
-              const active = link.label === "About" && isAbout;
+              const active = link.label === activeLabel;
+              const current = active
+                ? pathname === "/" && link.href.includes("#")
+                  ? "location"
+                  : "page"
+                : undefined;
               return (
                 <Link
                   key={link.label}
                   href={link.href}
-                  aria-current={active ? "page" : undefined}
+                  aria-current={current}
                   onClick={() => setOpen(false)}
                   className={active ? "is-active" : ""}
                 >

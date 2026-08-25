@@ -1,10 +1,10 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowUpRight, Github, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { featuredProjects, type Project, type ProjectAccent } from "@/app/data/projects";
 import GithubActivity from "./GithubActivity";
 import ContactSection from "./ContactSection";
@@ -132,141 +132,11 @@ function PortfolioImage({
   );
 }
 
-function InteractiveMascot() {
-  const [hovered, setHovered] = useState(false);
-  const [hintVisible, setHintVisible] = useState(false);
-  const [hint, setHint] = useState("Hai, saya Caesar.");
-  const pointerFrame = useRef<number | null>(null);
-  const hintTimer = useRef<number | null>(null);
-  const reduceMotion = useReducedMotion();
-
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const seen = new Set<string>();
-    const sections = [
-      {
-        id: "projects",
-        key: "caesar-mascot-projects",
-        message: "Ini beberapa project yang pernah saya bangun.",
-      },
-      {
-        id: "github-activity",
-        key: "caesar-mascot-github",
-        message: "Lihat aktivitas pengembangan saya di GitHub.",
-      },
-    ];
-
-    const observers = sections
-      .map((section) => {
-        const element = document.getElementById(section.id);
-        if (!element || sessionStorage.getItem(section.key)) {
-          return null;
-        }
-
-        const observer = new IntersectionObserver(
-          ([entry]) => {
-            if (!entry.isIntersecting || seen.has(section.key)) {
-              return;
-            }
-
-            seen.add(section.key);
-            sessionStorage.setItem(section.key, "true");
-            setHint(section.message);
-            setHintVisible(true);
-            if (hintTimer.current !== null) window.clearTimeout(hintTimer.current);
-            hintTimer.current = window.setTimeout(() => setHintVisible(false), 4200);
-          },
-          { threshold: 0.35 },
-        );
-
-        observer.observe(element);
-        return observer;
-      })
-      .filter(Boolean);
-
-    return () => {
-      observers.forEach((observer) => observer?.disconnect());
-      if (hintTimer.current !== null) window.clearTimeout(hintTimer.current);
-      if (pointerFrame.current !== null) window.cancelAnimationFrame(pointerFrame.current);
-    };
-  }, []);
-
-  const openChat = () => window.dispatchEvent(new Event("open-ask-caesar"));
-
-  return (
-    <div
-      className="ai-companion-shell"
-      onPointerMove={(event) => {
-        if (reduceMotion || event.pointerType !== "mouse") {
-          return;
-        }
-
-        const rect = event.currentTarget.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-
-        const x = Math.max(-1, Math.min(1, (event.clientX - centerX) / 72));
-        const y = Math.max(-1, Math.min(1, (event.clientY - centerY) / 72));
-        const shell = event.currentTarget;
-
-        if (pointerFrame.current !== null) {
-          window.cancelAnimationFrame(pointerFrame.current);
-        }
-
-        pointerFrame.current = window.requestAnimationFrame(() => {
-          shell.style.setProperty("--mascot-x", `${x * 5}px`);
-          shell.style.setProperty("--mascot-y", `${y * 4}px`);
-          shell.style.setProperty("--mascot-rotate", `${x * 3.5}deg`);
-        });
-      }}
-      onPointerLeave={(event) => {
-        event.currentTarget.style.setProperty("--mascot-x", "0px");
-        event.currentTarget.style.setProperty("--mascot-y", "0px");
-        event.currentTarget.style.setProperty("--mascot-rotate", "0deg");
-        setHovered(false);
-      }}
-      onPointerEnter={() => setHovered(true)}
-    >
-      <AnimatePresence>
-        {hovered || hintVisible ? (
-          <motion.div
-            initial={{ opacity: 0, y: 8, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.96 }}
-            className="ai-companion-tooltip"
-          >
-            {hint}
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
-
-      <button
-        type="button"
-        aria-label="Open Ask Caesar from mascot"
-        onClick={openChat}
-        className="ai-companion ai-companion--interactive"
-      >
-        <span className="ai-companion__halo" aria-hidden="true" />
-        <Image
-          src="/images/caesar-mascot.png"
-          alt=""
-          fill
-          sizes="(min-width: 1024px) 120px, (min-width: 640px) 96px, 80px"
-          className="ai-companion__image"
-        />
-      </button>
-    </div>
-  );
-}
-
 function Hero() {
   return (
     <section
       id="top"
-      className="relative isolate overflow-hidden px-5 pb-24 pt-32 sm:px-6 sm:pb-28 sm:pt-36 lg:min-h-screen lg:px-8 lg:pb-32"
+      className="home-hero relative isolate overflow-hidden px-5 pb-24 pt-32 sm:px-6 sm:pb-28 sm:pt-36 lg:min-h-screen lg:px-8 lg:pb-32"
     >
       <div className="cinematic-grid pointer-events-none absolute inset-0 -z-20" />
       <div
@@ -308,20 +178,24 @@ function Hero() {
         aria-hidden="true"
         className="hero-portrait-spotlight pointer-events-none absolute right-[max(1rem,calc((100vw-72rem)/2))] top-32 -z-10 h-[36rem] w-[34rem]"
       />
-      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[42rem] bg-[radial-gradient(circle_at_70%_15%,rgba(6,69,196,0.18),transparent_32rem)]" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-48 bg-gradient-to-t from-background to-transparent" />
+      <div className="hero-cobalt-field pointer-events-none absolute inset-x-0 top-0 -z-10 h-[42rem]" />
+      <div className="hero-bottom-fade pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-48" />
 
-      <div className="mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-[1.05fr_0.95fr]">
-        <div>
+      <div className="hero-layout">
+        <div className="hero-copy">
           <motion.div
             variants={fadeUp}
             initial="hidden"
             animate="visible"
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-xs uppercase tracking-[0.28em] text-secondary"
+            className="hero-role inline-flex items-center gap-3 rounded-full px-4 py-2 text-xs uppercase tracking-[0.28em]"
           >
-            <Sparkles size={14} className="text-blue-300" />
-            Software Engineer, AI & Data Mining Enthusiast
+            <Sparkles size={14} className="hero-role__icon" />
+            <span className="hero-role__engineering">Software Engineer</span>
+            <span aria-hidden="true">/</span>
+            <span className="hero-role__ai">AI</span>
+            <span aria-hidden="true">&amp;</span>
+            <span className="hero-role__data">Data Mining Enthusiast</span>
           </motion.div>
 
           <motion.h1
@@ -329,10 +203,10 @@ function Hero() {
             initial="hidden"
             animate="visible"
             transition={{ delay: 0.08, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-8 font-display text-[clamp(3.6rem,8vw,8.6rem)] font-semibold leading-[0.88] tracking-normal text-balance"
+            className="hero-heading mt-8 font-display text-[clamp(3.6rem,8vw,8.6rem)] font-semibold leading-[0.88] tracking-normal text-balance"
           >
             Muhammad
-            <span className="block text-white/70">Caesar Aidarus</span>
+            <span className="hero-name-secondary block">Caesar Aidarus</span>
           </motion.h1>
 
           <motion.p
@@ -393,7 +267,7 @@ function Hero() {
             {credibility.map((item) => (
               <div
                 key={item}
-                className="rounded-2xl border border-white/8 bg-white/[0.025] px-4 py-4 text-sm text-secondary backdrop-blur"
+                className="hero-credibility rounded-2xl px-4 py-4 text-sm"
               >
                 {item}
               </div>
@@ -405,10 +279,10 @@ function Hero() {
           initial={{ opacity: 0, scale: 0.97, y: 22 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ delay: 0.28, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mx-auto w-full max-w-[31rem] lg:mr-0"
+          className="home-profile-card-frame relative justify-self-center"
         >
-          <div className="absolute -inset-10 rounded-[3.5rem] bg-[radial-gradient(circle_at_50%_8%,rgba(248,250,252,0.2),transparent_28%),radial-gradient(circle_at_50%_44%,rgba(6,69,196,0.18),transparent_48%)] blur-2xl" />
-          <div className="absolute -bottom-8 left-10 right-10 h-24 rounded-full bg-black/65 blur-3xl" />
+          <div className="hero-profile-ambient absolute -inset-10 rounded-[3.5rem]" />
+          <div className="hero-profile-shadow absolute -bottom-8 left-10 right-10 h-24 rounded-full" />
           <HomeProfileCard />
         </motion.div>
       </div>
@@ -575,7 +449,7 @@ function ProjectContent({
 
 function FeaturedProjects() {
   return (
-    <section id="projects" className="relative px-5 py-24 sm:px-6 lg:px-8">
+    <section id="projects" className="home-section home-section--projects relative px-5 py-24 sm:px-6 lg:px-8">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
       <div className="mx-auto max-w-6xl">
         <motion.div
@@ -648,15 +522,14 @@ export default function PortfolioClient({
   }, []);
 
   return (
-    <main className="relative min-h-screen overflow-hidden">
+    <main className="home-page relative min-h-screen overflow-hidden">
       <SiteNavbar />
       <Hero />
       <FeaturedProjects />
-      <JourneySection />
-      <TechStackSection />
       <GithubActivity data={githubData} />
+      <TechStackSection />
+      <JourneySection />
       <ContactSection />
-      <InteractiveMascot />
     </main>
   );
 }

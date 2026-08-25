@@ -1,7 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Github } from "lucide-react";
+import { useCallback, useId, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { GithubActivityData, GithubContributionDay } from "@/lib/github";
 
 function formatDate(date: string) {
@@ -133,27 +135,125 @@ function ContributionCell({
   index: number;
   reduceMotion: boolean;
 }) {
+  const cellRef = useRef<HTMLSpanElement>(null);
+  const tooltipRef = useRef<HTMLSpanElement>(null);
+  const tooltipId = useId();
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [tooltipPosition, setTooltipPosition] = useState({
+    placement: "above" as "above" | "below",
+    x: 0,
+    y: 0,
+  });
   const intensity = getIntensity(day, maxContributions);
   const contributionText =
     day.contributionCount === 0
       ? "Tidak ada kontribusi"
       : `${day.contributionCount} kontribusi`;
 
+  const updateTooltipPosition = useCallback(() => {
+    const cell = cellRef.current;
+
+    if (!cell) {
+      return;
+    }
+
+    const cellBounds = cell.getBoundingClientRect();
+    const tooltipBounds = tooltipRef.current?.getBoundingClientRect();
+    const tooltipWidth = tooltipBounds?.width ?? 190;
+    const tooltipHeight = tooltipBounds?.height ?? 54;
+    const viewportInset = 10;
+    const offset = 9;
+    const placement =
+      cellBounds.top >= tooltipHeight + offset + viewportInset ? "above" : "below";
+    const centeredX = cellBounds.left + cellBounds.width / 2;
+    const halfTooltip = tooltipWidth / 2;
+    const x = Math.min(
+      window.innerWidth - halfTooltip - viewportInset,
+      Math.max(halfTooltip + viewportInset, centeredX),
+    );
+
+    setTooltipPosition({
+      placement,
+      x,
+      y: placement === "above" ? cellBounds.top - offset : cellBounds.bottom + offset,
+    });
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!tooltipVisible) {
+      return;
+    }
+
+    updateTooltipPosition();
+    window.addEventListener("resize", updateTooltipPosition);
+    window.addEventListener("scroll", updateTooltipPosition, true);
+
+    return () => {
+      window.removeEventListener("resize", updateTooltipPosition);
+      window.removeEventListener("scroll", updateTooltipPosition, true);
+    };
+  }, [tooltipVisible, updateTooltipPosition]);
+
+  const showTooltip = () => {
+    updateTooltipPosition();
+    setTooltipVisible(true);
+  };
+
   return (
-    <motion.span
-      className="github-activity__cell"
-      data-intensity={intensity}
-      aria-label={`${contributionText} pada ${formatDate(day.date)}`}
-      initial={reduceMotion ? false : { opacity: 0, scale: 0.72 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, scale: 1 }}
-      viewport={{ once: true, margin: "-10% 0px" }}
-      transition={{ delay: Math.min(index * 0.003, 0.7), duration: 0.24 }}
-    >
-      <span className="github-activity__tooltip">
-        <strong>{contributionText}</strong>
-        <small>{formatDate(day.date)}</small>
-      </span>
-    </motion.span>
+    <>
+      <motion.span
+        ref={cellRef}
+        className="github-activity__cell"
+        data-intensity={intensity}
+        role="gridcell"
+        tabIndex={0}
+        aria-label={`${contributionText} pada ${formatDate(day.date)}`}
+        aria-describedby={tooltipVisible ? tooltipId : undefined}
+        initial={reduceMotion ? false : { opacity: 0, scale: 0.72 }}
+        whileInView={reduceMotion ? undefined : { opacity: 1, scale: 1 }}
+        viewport={{ once: true, margin: "-10% 0px" }}
+        transition={{ delay: Math.min(index * 0.003, 0.7), duration: 0.24 }}
+        onMouseEnter={showTooltip}
+        onMouseLeave={() => setTooltipVisible(false)}
+        onFocus={showTooltip}
+        onBlur={() => setTooltipVisible(false)}
+      />
+
+      {typeof document !== "undefined"
+        ? createPortal(
+            <AnimatePresence>
+              {tooltipVisible ? (
+                <span
+                  className="github-activity__tooltip-positioner"
+                  data-placement={tooltipPosition.placement}
+                  style={{ left: tooltipPosition.x, top: tooltipPosition.y }}
+                >
+                  <motion.span
+                    ref={tooltipRef}
+                    id={tooltipId}
+                    role="tooltip"
+                    className="github-activity__tooltip"
+                    initial={{
+                      opacity: 0,
+                      y: tooltipPosition.placement === "above" ? 5 : -5,
+                    }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{
+                      opacity: 0,
+                      y: tooltipPosition.placement === "above" ? 5 : -5,
+                    }}
+                    transition={{ duration: reduceMotion ? 0 : 0.15, ease: "easeOut" }}
+                  >
+                    <strong>{contributionText}</strong>
+                    <small>{formatDate(day.date)}</small>
+                  </motion.span>
+                </span>
+              ) : null}
+            </AnimatePresence>,
+            document.body,
+          )
+        : null}
+    </>
   );
 }
 
@@ -171,7 +271,7 @@ export default function GithubActivity({
   const metrics = data ? calculateMetrics(days, weeks) : [];
 
   return (
-    <section id="github-activity" className="relative px-5 py-20 sm:px-6 lg:px-8">
+    <section id="github-activity" className="home-section home-section--github relative px-5 py-20 sm:px-6 lg:px-8">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
       <motion.div
         initial={{ opacity: 0, y: 34 }}
@@ -237,7 +337,7 @@ export default function GithubActivity({
               <div className="github-activity__calendar-wrap">
                 <div
                   className="github-activity__calendar"
-                  role="img"
+                  role="grid"
                   aria-label="GitHub contribution heatmap"
                 >
                   {days.map((day, index) => (

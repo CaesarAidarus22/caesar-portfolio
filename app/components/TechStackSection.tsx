@@ -44,7 +44,7 @@ export default function TechStackSection() {
   };
 
   return (
-    <section id="tech-stack" className="tech-stack-section relative px-5 py-24 sm:px-6 lg:px-8">
+    <section id="tech-stack" className="home-section home-section--tech tech-stack-section relative px-5 py-24 sm:px-6 lg:px-8">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
       <div className="mx-auto max-w-6xl">
         <motion.div

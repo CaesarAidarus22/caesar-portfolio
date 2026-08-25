@@ -5,7 +5,7 @@ import { socialLinks } from "@/app/data/socialLinks";
 
 export default function ContactSection() {
   return (
-    <section id="contact" className="contact-section" aria-labelledby="contact-title">
+    <section id="contact" className="home-section home-section--contact contact-section" aria-labelledby="contact-title">
       <div className="contact-section__copy">
         <p>Contact</p>
         <h2 id="contact-title">Let&apos;s connect.</h2>

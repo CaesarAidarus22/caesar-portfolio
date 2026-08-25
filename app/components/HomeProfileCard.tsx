@@ -77,7 +77,7 @@ export default function HomeProfileCard() {
               alt="Muhammad Caesar Aidarus"
               fill
               priority
-              sizes="(min-width: 1024px) 31rem, 90vw"
+              sizes="(min-width: 1600px) 410px, (min-width: 1280px) 27vw, (min-width: 768px) 340px, min(88vw, 360px)"
               className="home-profile-card__photo"
             />
             <span className="home-profile-card__front-wash" aria-hidden="true" />
