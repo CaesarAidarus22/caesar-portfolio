@@ -54,9 +54,22 @@ const accentStyles: Record<ProjectAccent, { label: string; border: string; wash:
 
 function ProjectAtmosphere({
   accent,
+  slug,
 }: {
   accent: ProjectAccent;
+  slug: string;
 }) {
+  if (slug === "sahamradar") {
+    return (
+      <div aria-hidden="true" className="project-atmosphere project-atmosphere--blue">
+        <span className="conversation-wave conversation-wave--one" />
+        <span className="conversation-wave conversation-wave--two" />
+        <span className="conversation-pulse conversation-pulse--one" />
+        <span className="conversation-pulse conversation-pulse--two" />
+      </div>
+    );
+  }
+
   if (accent === "green") {
     return (
       <div aria-hidden="true" className="project-atmosphere project-atmosphere--green">
@@ -85,25 +98,17 @@ function ProjectAtmosphere({
 
   return (
     <div aria-hidden="true" className="project-atmosphere project-atmosphere--blue">
-        <span className="chat-bubble chat-bubble--one">Mood?</span>
-        <span className="chat-bubble chat-bubble--two">Try this</span>
-        <span className="typing-indicator typing-indicator--one">
-          <span />
-          <span />
-          <span />
-        </span>
-        <span className="typing-indicator typing-indicator--two">
-          <span />
-          <span />
-          <span />
-        </span>
-        <span className="conversation-wave conversation-wave--one" />
-        <span className="conversation-wave conversation-wave--two" />
-        <span className="conversation-pulse conversation-pulse--one" />
-        <span className="conversation-pulse conversation-pulse--two" />
-        <span className="recommendation-card recommendation-card--one">Focus playlist</span>
-        <span className="recommendation-card recommendation-card--two">Quick game</span>
-      </div>
+      <span className="chat-bubble chat-bubble--one">Mood?</span>
+      <span className="chat-bubble chat-bubble--two">Try this</span>
+      <span className="typing-indicator typing-indicator--one"><span /><span /><span /></span>
+      <span className="typing-indicator typing-indicator--two"><span /><span /><span /></span>
+      <span className="conversation-wave conversation-wave--one" />
+      <span className="conversation-wave conversation-wave--two" />
+      <span className="conversation-pulse conversation-pulse--one" />
+      <span className="conversation-pulse conversation-pulse--two" />
+      <span className="recommendation-card recommendation-card--one">Focus playlist</span>
+      <span className="recommendation-card recommendation-card--two">Quick game</span>
+    </div>
   );
 }
 
@@ -318,12 +323,12 @@ function ProjectMockup({
         <div className="absolute inset-x-0 top-0 z-10 h-20 bg-gradient-to-b from-white/[0.1] to-transparent" />
         <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.08),transparent_28%),linear-gradient(180deg,transparent_68%,rgba(5,6,8,0.34)_100%)] opacity-80" />
         <div className="relative aspect-[16/10] overflow-hidden">
-          <PortfolioImage
-            src={project.heroImage!}
+          {project.heroImage ? <PortfolioImage
+            src={project.heroImage}
             alt={`${project.title} laptop mockup`}
             sizes={large ? "80vw" : "(min-width: 1024px) 48vw, 92vw"}
-            className="transition duration-700 group-hover:scale-[1.025]"
-          />
+            className={`${project.slug === "sahamradar" ? "object-contain" : ""} transition duration-700 group-hover:scale-[1.02]`}
+          /> : <div className="case-visual__placeholder"><span>{project.number}</span><strong>{project.shortTitle}</strong><small>{project.category}</small></div>}
         </div>
       </div>
     </motion.div>
@@ -468,33 +473,18 @@ function FeaturedProjects() {
         </motion.div>
 
         <div className="mt-20 space-y-12 sm:mt-24 sm:space-y-16">
-          <article className="project-showcase project-showcase--green relative overflow-hidden rounded-[2.5rem] border border-white/10 px-5 py-8 sm:p-8 lg:p-10">
-            <ProjectAtmosphere accent={projects[0].accent} />
-            <div className="relative z-10 grid items-center gap-12 lg:grid-cols-[1.08fr_0.92fr]">
-              <ProjectMockup project={projects[0]} />
-              <ProjectContent project={projects[0]} />
-            </div>
-          </article>
-
-          <article className="project-showcase project-showcase--beige relative overflow-hidden rounded-[2.5rem] border border-white/10 px-5 py-8 sm:p-8 lg:p-10">
-            <ProjectAtmosphere accent={projects[1].accent} />
-            <div className="relative z-10 grid items-center gap-12 lg:grid-cols-[0.92fr_1.08fr]">
-              <div className="lg:order-1">
-                <ProjectContent project={projects[1]} />
-              </div>
-              <div className="lg:order-2">
-                <ProjectMockup project={projects[1]} />
-              </div>
-            </div>
-          </article>
-
-          <article className="project-showcase project-showcase--blue relative overflow-hidden rounded-[2.5rem] border border-white/10 px-5 py-8 sm:p-8 lg:p-10">
-            <ProjectAtmosphere accent={projects[2].accent} />
-            <div className="relative z-10 grid items-center gap-12 lg:grid-cols-[1.08fr_0.92fr]">
-              <ProjectMockup project={projects[2]} />
-              <ProjectContent project={projects[2]} />
-            </div>
-          </article>
+          {projects.map((project, index) => {
+            const reverse = index % 2 === 1;
+            return (
+              <article key={project.slug} className={`project-showcase project-showcase--${project.accent} relative overflow-hidden rounded-[2.5rem] border border-white/10 px-5 py-8 sm:p-8 lg:p-10`}>
+                <ProjectAtmosphere accent={project.accent} slug={project.slug} />
+                <div className={`relative z-10 grid items-center gap-12 ${reverse ? "lg:grid-cols-[0.92fr_1.08fr]" : "lg:grid-cols-[1.08fr_0.92fr]"}`}>
+                  <div className={reverse ? "lg:order-2" : ""}><ProjectMockup project={project} /></div>
+                  <div className={reverse ? "lg:order-1" : ""}><ProjectContent project={project} /></div>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

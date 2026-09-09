@@ -17,6 +17,7 @@ const viewports = [
 ];
 
 const projectSlugs = [
+  "sahamradar",
   "smart-insect-identifier", "campusfind", "gabutbot", "nubofind",
   "nlp-speech-pipeline", "yolo-queue-detection",
 ];
@@ -239,7 +240,8 @@ async function verifyProjectsAndNotFound(page) {
   for (const slug of projectSlugs) {
     await page.goto(`${url}/projects/${slug}`, { waitUntil: "domcontentloaded" });
     await page.locator(".case-page").waitFor({ state: "visible" });
-    assert(await page.locator(".case-project-nav a").count() === 2, `${slug} previous/next navigation missing`);
+    const expectedLinks = slug === projectSlugs[0] || slug === projectSlugs.at(-1) ? 1 : 2;
+    assert(await page.locator(".case-project-nav a").count() === expectedLinks, `${slug} previous/next navigation is incorrect`);
     assert(await page.locator('a:has-text("Live Demo")').count() === 0, `${slug} contains Live Demo`);
   }
 
@@ -247,7 +249,7 @@ async function verifyProjectsAndNotFound(page) {
   assert(response?.status() === 404, "Unknown project did not return HTTP 404");
   await page.locator(".not-found-page").waitFor({ state: "visible" });
   assert((await page.locator("body").innerText()).includes("di luar peta"), "Custom 404 did not render");
-  console.log("OK six project routes and project 404");
+  console.log("OK seven project routes and project 404");
 }
 
 async function main() {

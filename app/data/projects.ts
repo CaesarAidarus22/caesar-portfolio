@@ -20,6 +20,8 @@ export type Project = {
   challenges?: string[];
   results?: string;
   lessons?: string;
+  engineeringContribution?: string;
+  showcase?: string;
   accent: ProjectAccent;
   accentColor: string;
   status?: string;
@@ -27,10 +29,58 @@ export type Project = {
   stats?: Array<{ value: string; label?: string }>;
 };
 
-export const projects: Project[] = [
+const projectEntries: Array<Omit<Project, "number">> = [
+  {
+    slug: "sahamradar",
+    title: "SahamRadar",
+    shortTitle: "SahamRadar",
+    category: "Market Intelligence Platform",
+    summary:
+      "Platform market intelligence yang menggabungkan berita, sentimen, ticker saham, dan AI insight untuk membantu memahami pergerakan pasar saham Indonesia.",
+    description:
+      "SahamRadar dirancang sebagai platform market intelligence yang menyatukan informasi pasar saham Indonesia ke dalam pengalaman yang lebih terstruktur. Platform ini menggabungkan pemantauan berita, analisis sentimen, ticker saham, dan insight berbasis AI agar pengguna dapat memahami konteks pergerakan pasar dengan lebih cepat.",
+    year: "2026",
+    technologies: ["AI", "Sentiment Analysis", "Market Data"],
+    heroImage: "/images/sahamradar-mockup.png",
+    problem:
+      "Informasi yang memengaruhi pasar saham tersebar di banyak sumber. Pengguna perlu membaca berita, melihat ticker, memahami sentimen, dan menghubungkan informasi tersebut secara manual sebelum mendapatkan gambaran kondisi pasar.",
+    solution:
+      "SahamRadar menyatukan berita pasar, kecenderungan sentimen, konteks ticker, dan ringkasan AI dalam satu dashboard agar sinyal pasar dapat dibaca sebagai konteks yang saling terhubung.",
+    architecture: [
+      "Berita dan informasi pasar dikumpulkan sebagai konteks utama",
+      "Informasi dikelompokkan bersama sentimen dan ticker yang relevan",
+      "AI merangkum sinyal utama menjadi market insight yang ringkas",
+      "Dashboard menyajikan seluruh konteks dalam satu alur baca",
+    ],
+    features: [
+      "Market news monitoring untuk memusatkan berita yang relevan",
+      "Sentiment analysis untuk membaca kecenderungan informasi pasar",
+      "Ticker monitoring untuk memberi konteks pada saham yang dipantau",
+      "AI market insight untuk merangkum sinyal penting",
+      "Market dashboard yang menyatukan informasi secara terstruktur",
+    ],
+    engineeringContribution:
+      "Kontribusi berfokus pada perancangan pengalaman dashboard dan alur informasi yang menghubungkan berita, sentimen, ticker, serta AI insight menjadi satu produk yang mudah dipindai.",
+    showcase:
+      "Mockup menampilkan pengalaman utama SahamRadar: market pulse, moving news, ringkasan sentimen, AI insight, dan ticker dalam satu tampilan yang konsisten.",
+    challenges: [
+      "Menyatukan beberapa jenis informasi pasar tanpa membuat dashboard terasa padat",
+      "Menempatkan hasil analisis sebagai konteks yang mudah dibaca, bukan sekadar data terpisah",
+      "Menjaga hierarki antara berita, sentimen, ticker, dan ringkasan AI",
+    ],
+    lessons:
+      "Produk data membutuhkan hierarki informasi yang sama kuatnya dengan proses analisisnya. Insight menjadi lebih berguna ketika sumber, sentimen, dan konteks ticker tetap terlihat dalam alur yang jelas.",
+    accent: "blue",
+    accentColor: "#2563EB",
+    featured: true,
+    stats: [
+      { value: "Market Intelligence" },
+      { value: "Sentiment Context" },
+      { value: "AI Insight" },
+    ],
+  },
   {
     slug: "smart-insect-identifier",
-    number: "01",
     title: "Smart Insect Identifier & AI Insights",
     shortTitle: "Smart Insect Identifier",
     category: "AI Vision Platform",
@@ -79,7 +129,6 @@ export const projects: Project[] = [
   },
   {
     slug: "campusfind",
-    number: "02",
     title: "CampusFind",
     shortTitle: "CampusFind",
     category: "Campus Lost & Found",
@@ -127,7 +176,6 @@ export const projects: Project[] = [
   },
   {
     slug: "gabutbot",
-    number: "03",
     title: "GabutBot",
     shortTitle: "GabutBot",
     category: "Recommendation Chatbot",
@@ -148,7 +196,6 @@ export const projects: Project[] = [
   },
   {
     slug: "nubofind",
-    number: "04",
     title: "NuboFind",
     shortTitle: "NuboFind",
     category: "Sports Search & Data",
@@ -160,10 +207,10 @@ export const projects: Project[] = [
     accent: "slate",
     accentColor: "#7991a4",
     status: "Public repository sudah tersedia; dokumentasi project yang lebih lengkap masih disiapkan.",
+    featured: true,
   },
   {
     slug: "nlp-speech-pipeline",
-    number: "05",
     title: "NLP Speech Code-Switching Pipeline",
     shortTitle: "NLP Speech Pipeline",
     category: "Natural Language Processing",
@@ -197,10 +244,10 @@ export const projects: Project[] = [
       "Sistem NLP end-to-end menjadi lebih terukur dengan tahapan eksplisit dan fallback yang dapat diganti. Setiap tahap bisa diuji dan ditingkatkan secara independen.",
     accent: "purple",
     accentColor: "#8d7ca6",
+    featured: true,
   },
   {
     slug: "yolo-queue-detection",
-    number: "06",
     title: "YOLO Queue Detection System",
     shortTitle: "YOLO Queue Detection",
     category: "Computer Vision",
@@ -240,8 +287,14 @@ export const projects: Project[] = [
       "Pemilihan model dan post-processing menyeimbangkan accuracy dengan speed. Langkah berikutnya yang terdokumentasi adalah mengevaluasi model YOLO yang lebih baru dan training data khusus antrean.",
     accent: "amber",
     accentColor: "#b78a4c",
+    featured: true,
   },
 ];
+
+export const projects: Project[] = projectEntries.map((project, index) => ({
+  ...project,
+  number: String(index + 1).padStart(2, "0"),
+}));
 
 export const featuredProjects = projects.filter((project) => project.featured);
 
@@ -253,7 +306,7 @@ export function getAdjacentProjects(slug: string) {
   const index = projects.findIndex((project) => project.slug === slug);
 
   return {
-    previous: projects[(index - 1 + projects.length) % projects.length],
-    next: projects[(index + 1) % projects.length],
+    previous: index > 0 ? projects[index - 1] : undefined,
+    next: index >= 0 && index < projects.length - 1 ? projects[index + 1] : undefined,
   };
 }

@@ -4588,6 +4588,24 @@ a.about-social__card:focus-visible .about-social__icon svg {
   object-fit: cover;
 }
 
+.case-visual__image--contain {
+  object-fit: contain;
+}
+
+.case-showcase-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  margin-top: 2rem;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: rgba(8, 24, 44, 0.72);
+}
+
+.case-showcase-image img {
+  object-fit: contain;
+}
+
 .case-visual__placeholder {
   position: absolute;
   inset: 0;

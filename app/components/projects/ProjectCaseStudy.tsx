@@ -31,8 +31,8 @@ export default function ProjectCaseStudy({
   next,
 }: {
   project: Project;
-  previous: Project;
-  next: Project;
+  previous?: Project;
+  next?: Project;
 }) {
   const style = { "--case-accent": project.accentColor } as CSSProperties;
 
@@ -75,7 +75,7 @@ export default function ProjectCaseStudy({
               fill
               priority
               sizes="(min-width: 1024px) 48vw, 92vw"
-              className="case-visual__image"
+              className={`case-visual__image ${project.slug === "sahamradar" ? "case-visual__image--contain" : ""}`}
             />
           ) : (
             <div className="case-visual__placeholder" aria-label={`${project.title} visual identity`}>
@@ -90,7 +90,7 @@ export default function ProjectCaseStudy({
       <div className="case-body">
         <section className="case-overview" aria-labelledby="case-overview-title">
           <div>
-            <p className="case-section-kicker">Overview</p>
+            <p className="case-section-kicker">01 — Overview</p>
             <h2 id="case-overview-title">Dibangun dari masalah yang jelas menjadi sistem yang bekerja.</h2>
           </div>
           <div className="case-overview__details">
@@ -105,19 +105,10 @@ export default function ProjectCaseStudy({
         </section>
 
         {project.problem ? (
-          <StorySection number="01" title="The problem"><p>{project.problem}</p></StorySection>
+          <StorySection number="02" title="The problem"><p>{project.problem}</p></StorySection>
         ) : null}
         {project.solution ? (
-          <StorySection number="02" title="The solution"><p>{project.solution}</p></StorySection>
-        ) : null}
-        {project.architecture?.length ? (
-          <StorySection number="03" title="System architecture">
-            <ol className="case-architecture">
-              {project.architecture.map((item, index) => (
-                <li key={item}><span>{String(index + 1).padStart(2, "0")}</span><p>{item}</p></li>
-              ))}
-            </ol>
-          </StorySection>
+          <StorySection number="03" title="The solution"><p>{project.solution}</p></StorySection>
         ) : null}
         {project.features?.length ? (
           <StorySection number="04" title="Key features">
@@ -126,29 +117,56 @@ export default function ProjectCaseStudy({
             </ul>
           </StorySection>
         ) : null}
+        {project.architecture?.length ? (
+          <StorySection number="05" title="System / data flow">
+            <ol className="case-architecture">
+              {project.architecture.map((item, index) => (
+                <li key={item}><span>{String(index + 1).padStart(2, "0")}</span><p>{item}</p></li>
+              ))}
+            </ol>
+          </StorySection>
+        ) : null}
+        {project.technologies.length ? (
+          <StorySection number="06" title="Tech stack">
+            <div className="case-tech-list" aria-label="Project technology and capability stack">
+              {project.technologies.map((technology) => <span key={technology}>{technology}</span>)}
+            </div>
+          </StorySection>
+        ) : null}
+        {project.engineeringContribution ? (
+          <StorySection number="07" title="Engineering contribution"><p>{project.engineeringContribution}</p></StorySection>
+        ) : null}
+        {project.showcase && project.heroImage ? (
+          <StorySection number="08" title="Project showcase">
+            <p>{project.showcase}</p>
+            <div className="case-showcase-image">
+              <Image src={project.heroImage} alt={`${project.title} full project showcase`} fill sizes="(min-width: 1024px) 62vw, 92vw" />
+            </div>
+          </StorySection>
+        ) : null}
         {project.challenges?.length ? (
-          <StorySection number="05" title="Challenges">
+          <StorySection number="09" title="Challenges">
             <ul className="case-challenge-list">
               {project.challenges.map((challenge) => <li key={challenge}>{challenge}</li>)}
             </ul>
           </StorySection>
         ) : null}
         {project.results ? (
-          <StorySection number="06" title="Outcome"><p>{project.results}</p></StorySection>
+          <StorySection number="08" title="Outcome"><p>{project.results}</p></StorySection>
         ) : null}
         {project.lessons ? (
-          <StorySection number="07" title="What I learned"><p>{project.lessons}</p></StorySection>
+          <StorySection number="10" title="What I learned"><p>{project.lessons}</p></StorySection>
         ) : null}
 
         <nav className="case-project-nav" aria-label="Project case studies">
-          <Link href={`/projects/${previous.slug}`}>
+          {previous ? <Link href={`/projects/${previous.slug}`}>
             <span><ArrowLeft size={17} /> Previous project</span>
             <strong>{previous.shortTitle}</strong>
-          </Link>
-          <Link href={`/projects/${next.slug}`}>
+          </Link> : <span aria-hidden="true" />}
+          {next ? <Link href={`/projects/${next.slug}`}>
             <span>Next project <ArrowRight size={17} /></span>
             <strong>{next.shortTitle}</strong>
-          </Link>
+          </Link> : null}
         </nav>
       </div>
     </main>

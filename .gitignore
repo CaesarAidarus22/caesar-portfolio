@@ -1,6 +1,25 @@
-node_modules
-.next
+node_modules/
+.next/
+out/
+coverage/
+
+# Local environment files (keep a shareable template trackable)
 .env*
+!.env.example
+
+# Logs and package-manager caches
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm/
+.yarn/
+.pnpm-store/
+
+# Hosting and tooling metadata
+.vercel/
+.turbo/
 
 .chrome-profile/
 .chrome-profile-projects/
@@ -9,5 +28,13 @@ screenshots/
 .codex/
 .impeccable/
 tsconfig.tsbuildinfo
+
+# Editor and OS metadata
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
 DESIGN.md
 PRODUCT.md

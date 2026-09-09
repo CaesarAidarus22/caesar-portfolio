@@ -20,7 +20,9 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${project.title} | Muhammad Caesar Aidarus`,
+    title: project.slug === "sahamradar"
+      ? "SahamRadar — Indonesian Market Intelligence | M. Caesar Aidarus"
+      : `${project.title} | Muhammad Caesar Aidarus`,
     description: project.summary,
     openGraph: {
       title: project.title,

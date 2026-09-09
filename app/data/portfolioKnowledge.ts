@@ -25,6 +25,7 @@ export const portfolioFacts = {
   },
   projects,
   aiProjectSlugs: [
+    "sahamradar",
     "smart-insect-identifier",
     "nlp-speech-pipeline",
     "yolo-queue-detection",
