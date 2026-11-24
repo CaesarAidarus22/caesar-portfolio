@@ -54,6 +54,7 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
       {show && (
         <motion.div
           key="loader"
+          data-theme="brand"
           className="fixed inset-0 z-[100] flex flex-col justify-between bg-brand p-5 text-white md:p-8"
           exit={{ clipPath: "inset(0 0 100% 0)" }}
           initial={{ clipPath: "inset(0 0 0% 0)" }}

@@ -22,7 +22,7 @@ export default function Marquee() {
   );
 
   return (
-    <motion.div style={{ rotate }} className="relative z-10 -mx-4 my-10 overflow-hidden bg-brand py-4 text-white md:py-6">
+    <motion.div data-theme="brand" style={{ rotate }} className="relative z-10 -mx-4 my-10 overflow-hidden bg-brand py-4 text-white md:py-6">
       <div className="animate-marquee flex w-max">
         {row}
         {row}

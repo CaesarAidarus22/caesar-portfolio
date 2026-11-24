@@ -139,6 +139,7 @@ export default function ProjectView({ slug }: { slug: string }) {
 
       <Link
         href={`/${locale}/projects/${next.slug}`}
+        data-theme="brand"
         className="group mb-24 mt-6 block rounded-[1.75rem] bg-brand p-8 text-white md:p-12"
         data-cursor={t.project.next.split(" ")[0]}
       >

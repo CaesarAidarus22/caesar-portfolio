@@ -23,7 +23,7 @@ export default function Contact() {
   ] as const;
 
   return (
-    <footer ref={ref} id="contact" className="relative overflow-hidden rounded-t-[2.5rem] bg-ink px-5 pb-6 pt-20 text-white md:px-8 md:pt-28">
+    <footer ref={ref} id="contact" data-theme="dark" className="relative overflow-hidden rounded-t-[2.5rem] bg-ink px-5 pb-6 pt-20 text-white md:px-8 md:pt-28">
       <div className="pointer-events-none absolute -bottom-40 left-1/2 h-[36rem] w-[60rem] -translate-x-1/2 rounded-full bg-brand/40 blur-[140px]" />
 
       <SectionLabel n="05" onBrand className="relative !text-white/60">{t.contact.label}</SectionLabel>

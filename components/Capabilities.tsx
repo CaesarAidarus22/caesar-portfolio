@@ -7,6 +7,8 @@ import { FadeUp, SectionLabel } from "./ui";
 
 // kartu bergantian: brand, ink, blush, brandDeep
 const TONES = ["bg-brand text-white", "bg-ink text-white", "bg-blush text-ink", "bg-brandDeep text-white"];
+// tema kursor per kartu (blush terang → tanpa tema)
+const THEMES = ["brand", "dark", undefined, "brand"];
 
 const TOOLS = [
   "Python", "TensorFlow", "Scikit-learn", "OpenCV", "YOLO", "Whisper", "Gemini API",
@@ -16,7 +18,7 @@ const TOOLS = [
 
 function Card({ i, title, body }: { i: number; title: string; body: string }) {
   return (
-    <article className={`flex h-[24rem] w-full shrink-0 flex-col justify-between rounded-[1.75rem] p-7 md:h-[30rem] md:w-[26rem] md:p-9 ${TONES[i % TONES.length]}`}>
+    <article data-theme={THEMES[i % THEMES.length]} className={`flex h-[24rem] w-full shrink-0 flex-col justify-between rounded-[1.75rem] p-7 md:h-[30rem] md:w-[26rem] md:p-9 ${TONES[i % TONES.length]}`}>
       <div className="flex items-start justify-between font-mono text-xs">
         <span>[0{i + 1}]</span>
         <svg viewBox="0 0 24 24" className="h-7 w-7 fill-current opacity-90" aria-hidden>

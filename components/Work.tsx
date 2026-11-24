@@ -36,6 +36,7 @@ export default function Work() {
   return (
     <section
       id="work"
+      data-theme="brand"
       className="relative bg-brand px-5 py-24 text-white md:px-8 md:py-32"
       onPointerMove={(e) => {
         x.set(e.clientX);

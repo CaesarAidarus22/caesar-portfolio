@@ -101,6 +101,7 @@ export default function Nav() {
       <AnimatePresence>
         {open && (
           <motion.div
+            data-theme="brand"
             className="fixed inset-0 z-40 flex flex-col justify-end bg-brand px-5 pb-10 text-white lg:hidden"
             initial={{ clipPath: "inset(0 0 100% 0)" }}
             animate={{ clipPath: "inset(0 0 0% 0)" }}
