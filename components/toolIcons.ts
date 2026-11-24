@@ -1,0 +1,23 @@
+// Ikon toolbox (simple-icons, CC0). Diimpor satu per satu agar tree-shaking tetap kecil,
+// dan dimuat lewat import() setelah hidrasi supaya tidak menambah First Load JS.
+export {
+  siExpress,
+  siFastapi,
+  siGit,
+  siGooglegemini,
+  siMysql,
+  siNextdotjs,
+  siNodedotjs,
+  siOpencv,
+  siPostgresql,
+  siPostman,
+  siPrisma,
+  siPython,
+  siReact,
+  siScikitlearn,
+  siSupabase,
+  siTailwindcss,
+  siTensorflow,
+  siTypescript,
+  siUltralytics,
+} from "simple-icons";
