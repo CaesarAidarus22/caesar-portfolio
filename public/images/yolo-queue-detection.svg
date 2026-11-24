@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" font-family="Inter, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#121a28"/>
+      <stop offset="1" stop-color="#080e1a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.4" cy="0.5" r="0.6">
+      <stop offset="0" stop-color="#f5c542" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#f5c542" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="meter" x1="0" x2="1">
+      <stop offset="0" stop-color="#34d399"/>
+      <stop offset="0.5" stop-color="#f5c542"/>
+      <stop offset="1" stop-color="#f87171"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1e293b" stop-opacity="0"/>
+      <stop offset="1" stop-color="#1e293b" stop-opacity="0.8"/>
+    </linearGradient>
+    <symbol id="person" viewBox="-40 -150 80 150">
+      <circle cx="0" cy="-122" r="22"/>
+      <path d="M-34 0v-58c0-24 14-38 34-38s34 14 34 38v58z"/>
+    </symbol>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity="0.035"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <rect width="1600" height="1000" fill="url(#grid)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+
+  <!-- camera frame -->
+  <rect x="120" y="140" width="960" height="720" rx="32" fill="#0b1322" stroke="#ffffff" stroke-opacity="0.12"/>
+  <rect x="120" y="560" width="960" height="300" rx="32" fill="url(#floor)"/>
+  <g stroke="#f5c542" stroke-width="5" fill="none" stroke-linecap="round">
+    <path d="M150 200v-30h30M1050 200v-30h-30M150 800v30h30M1050 800v30h-30"/>
+  </g>
+  <circle cx="186" cy="208" r="8" fill="#f87171"/>
+  <text x="204" y="216" font-size="20" fill="#cbd5e1" letter-spacing="3">REC · CAM 01</text>
+
+  <!-- queue line -->
+  <path d="M200 686H1000" stroke="#334155" stroke-width="3" stroke-dasharray="14 12"/>
+
+  <!-- people, back to front -->
+  <g fill="#64748b">
+    <use href="#person" x="230" y="470" width="110" height="206" fill="#475569"/>
+    <use href="#person" x="350" y="450" width="120" height="226"/>
+    <use href="#person" x="480" y="430" width="130" height="246"/>
+    <use href="#person" x="625" y="410" width="140" height="266"/>
+    <use href="#person" x="780" y="384" width="152" height="292" fill="#94a3b8"/>
+  </g>
+
+  <!-- bounding boxes -->
+  <g fill="none" stroke="#f5c542" stroke-width="3">
+    <rect x="236" y="462" width="98" height="220" rx="4"/>
+    <rect x="356" y="442" width="108" height="240" rx="4"/>
+    <rect x="486" y="422" width="118" height="260" rx="4"/>
+    <rect x="632" y="400" width="126" height="282" rx="4"/>
+    <rect x="788" y="374" width="136" height="308" rx="4"/>
+  </g>
+  <g font-size="16" font-weight="600" fill="#0b1322">
+    <rect x="236" y="436" width="98" height="26" fill="#f5c542"/><text x="244" y="455">person .81</text>
+    <rect x="356" y="416" width="98" height="26" fill="#f5c542"/><text x="364" y="435">person .88</text>
+    <rect x="486" y="396" width="98" height="26" fill="#f5c542"/><text x="494" y="415">person .90</text>
+    <rect x="632" y="374" width="98" height="26" fill="#f5c542"/><text x="640" y="393">person .93</text>
+    <rect x="788" y="348" width="98" height="26" fill="#f5c542"/><text x="796" y="367">person .96</text>
+  </g>
+
+  <!-- stats panel -->
+  <rect x="1130" y="140" width="350" height="330" rx="32" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.12"/>
+  <text x="1170" y="200" font-size="20" letter-spacing="6" fill="#94a3b8">PEOPLE COUNT</text>
+  <text x="1166" y="350" font-size="150" font-weight="700" fill="#f8fafc">05</text>
+  <text x="1170" y="420" font-size="22" fill="#64748b">detected in frame</text>
+
+  <rect x="1130" y="500" width="350" height="360" rx="32" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.12"/>
+  <text x="1170" y="560" font-size="20" letter-spacing="6" fill="#94a3b8">DENSITY</text>
+  <rect x="1170" y="610" width="270" height="18" rx="9" fill="#1e293b"/>
+  <rect x="1170" y="610" width="270" height="18" rx="9" fill="url(#meter)" opacity="0.9"/>
+  <circle cx="1305" cy="619" r="16" fill="#f8fafc" stroke="#0b1322" stroke-width="4"/>
+  <g font-size="18" fill="#64748b">
+    <text x="1170" y="664">Sepi</text>
+    <text x="1305" y="664" text-anchor="middle">Sedang</text>
+    <text x="1440" y="664" text-anchor="end">Padat</text>
+  </g>
+  <rect x="1170" y="720" width="220" height="70" rx="35" fill="#f5c542" fill-opacity="0.15" stroke="#f5c542" stroke-opacity="0.6"/>
+  <circle cx="1210" cy="755" r="9" fill="#f5c542"/>
+  <text x="1232" y="764" font-size="26" font-weight="600" fill="#fde68a">SEDANG</text>
+</svg>

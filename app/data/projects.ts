@@ -204,6 +204,7 @@ const projectEntries: Array<Omit<Project, "number">> = [
     year: "2025",
     technologies: ["Information Retrieval", "Search", "Data Processing"],
     githubUrl: "https://github.com/CaesarAidarus22/Project-Penelusuran-Informasi-kel14",
+    heroImage: "/images/nubofind.svg",
     accent: "slate",
     accentColor: "#7991a4",
     status: "Public repository sudah tersedia; dokumentasi project yang lebih lengkap masih disiapkan.",
@@ -222,6 +223,7 @@ const projectEntries: Array<Omit<Project, "number">> = [
     year: "2026",
     technologies: ["Whisper", "Node.js", "Gemini", "Text-to-Speech", "NLP"],
     githubUrl: "https://github.com/CaesarAidarus22/UAS-Prak_NLP_M.CaesarAidarus_2372",
+    heroImage: "/images/nlp-speech-pipeline.svg",
     problem:
       "Code-switching speech membutuhkan beberapa tahap pemrosesan yang bekerja bersama: transkripsi, text cleanup, language awareness, response generation, dan speech synthesis.",
     solution:
@@ -260,6 +262,7 @@ const projectEntries: Array<Omit<Project, "number">> = [
     technologies: ["Python", "OpenCV", "YOLOv3-tiny", "Computer Vision"],
     githubUrl:
       "https://github.com/CaesarAidarus22/UAS-Viskom-M.Caesar-Aidarus-2308107010072-Deteksi-Orang-Dalam-Antrian",
+    heroImage: "/images/yolo-queue-detection.svg",
     problem:
       "Memperkirakan kepadatan antrean dari still image membutuhkan person detection yang andal sekaligus mengurangi false positive dari objek yang tampak serupa.",
     solution:
