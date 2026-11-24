@@ -140,8 +140,12 @@ function PortfolioImage({
 
 function Hero() {
   const heroRef = useRef<HTMLElement>(null);
-  // Starts true so SSR markup and the first paint keep animations running.
-  const heroInView = useInView(heroRef, { initial: true });
+  // Starts false: SSR markup ships the hero paused at t=0, so a page opened
+  // below the hero (e.g. /#projects) never runs it. Animations resume from t=0
+  // once the observer reports the hero in view, so there is no visual jump.
+  // The -1px margin ignores edge contact (e.g. /#projects lands exactly on
+  // the hero's bottom edge, which IntersectionObserver counts as visible).
+  const heroInView = useInView(heroRef, { margin: "-1px 0px" });
 
   return (
     <section
