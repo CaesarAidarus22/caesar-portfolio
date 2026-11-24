@@ -59,17 +59,6 @@ function ProjectAtmosphere({
   accent: ProjectAccent;
   slug: string;
 }) {
-  if (slug === "sahamradar") {
-    return (
-      <div aria-hidden="true" className="project-atmosphere project-atmosphere--blue">
-        <span className="conversation-wave conversation-wave--one" />
-        <span className="conversation-wave conversation-wave--two" />
-        <span className="conversation-pulse conversation-pulse--one" />
-        <span className="conversation-pulse conversation-pulse--two" />
-      </div>
-    );
-  }
-
   if (accent === "green") {
     return (
       <div aria-hidden="true" className="project-atmosphere project-atmosphere--green">
@@ -92,6 +81,18 @@ function ProjectAtmosphere({
         <span className="location-marker location-marker--three" />
         <span className="campus-node campus-node--one">Library</span>
         <span className="campus-node campus-node--two">Gate B</span>
+      </div>
+    );
+  }
+
+  if (slug !== "gabutbot") {
+    // Neutral ambience (no labelled chips) for projects without a bespoke scene.
+    return (
+      <div aria-hidden="true" className="project-atmosphere project-atmosphere--blue">
+        <span className="conversation-wave conversation-wave--one" />
+        <span className="conversation-wave conversation-wave--two" />
+        <span className="conversation-pulse conversation-pulse--one" />
+        <span className="conversation-pulse conversation-pulse--two" />
       </div>
     );
   }
