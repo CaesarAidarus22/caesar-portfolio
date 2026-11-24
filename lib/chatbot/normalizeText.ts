@@ -11,6 +11,8 @@ const corrections: Array<[RegExp, string]> = [
   [/\bdimana\b/g, "di mana"],
   [/\bga\b/g, "tidak"],
   [/\bgak\b/g, "tidak"],
+  // akhiran -nya ("pengalamannya" → "pengalaman"); kata dasar ≥4 huruf agar "punya" tidak terpotong
+  [/\b([a-z]{4,})nya\b/g, "$1"],
 ];
 
 export function normalizeText(value: string) {

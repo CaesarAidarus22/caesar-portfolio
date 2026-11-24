@@ -54,7 +54,7 @@ const id = {
     title: "Pengalaman & Prestasi",
     experience: "Pengalaman",
     achievements: "Lomba & Prestasi",
-    slot: "Slot kosong — isi di lib/site.ts",
+    highlight: "Juara 1",
   },
   contact: {
     label: "Kontak",
@@ -155,7 +155,7 @@ const en: Dictionary = {
     title: "Experience & Awards",
     experience: "Experience",
     achievements: "Competitions",
-    slot: "Empty slot — fill it in lib/site.ts",
+    highlight: "1st Place",
   },
   contact: {
     label: "Contact",

@@ -39,9 +39,24 @@ export const site = {
   },
 };
 
-export type SlotItem = { period: string; title: L; org: L; description?: L };
+export type SlotItem = { period: string; title: L; org: L; description?: L; highlight?: boolean };
 
-/** SLOT: pengalaman kerja/organisasi. Kosong = tampil kartu placeholder. */
+const MONTHS = ["jan", "feb", "mar", "apr", "may|mei", "jun", "jul", "aug|agu", "sep", "oct|okt", "nov", "dec|des"];
+
+/** Nilai urut dari akhir period ("Jan 2026 – Feb 2026" → Feb 2026). Hanya tahun = Desember; kosong = paling bawah. */
+export function periodEnd(period: string) {
+  const all = [...period.matchAll(/(?:([a-z]{3})[a-z]*\.?\s+)?(\d{4})/gi)];
+  const last = all.at(-1);
+  if (!last) return -Infinity;
+  const m = last[1] ? MONTHS.findIndex((alts) => alts.split("|").includes(last[1].toLowerCase())) : 11;
+  return Number(last[2]) * 12 + (m < 0 ? 11 : m);
+}
+
+/** Urutan tampil: item highlight paling atas, lalu yang terbaru. */
+export const byRecent = (items: SlotItem[]) =>
+  [...items].sort((a, b) => Number(!!b.highlight) - Number(!!a.highlight) || periodEnd(b.period) - periodEnd(a.period));
+
+/** Pengalaman kerja/organisasi. Urutan tampil diatur byRecent(). */
 export const experience: SlotItem[] = [
   {
     period: "Jan 2026 – Feb 2026",
@@ -56,15 +71,17 @@ export const experience: SlotItem[] = [
     },
   },
   {
-    period: "TODO",
-    title: { id: "Peserta KKN", en: "Community Service Participant (KKN)" },
+    period: "Jul 2026 – Aug 2026",
+    title: { id: "Ketua Kelompok KKN", en: "KKN Group Leader" },
     org: { id: "Universitas Syiah Kuala — KKN LT 69", en: "Universitas Syiah Kuala — KKN LT 69" },
-    description: { id: "TODO: kontribusi konkret", en: "TODO: concrete contribution" },
+    description: {
+      id: "Memimpin kelompok KKN LT 69 sebagai ketua dan mengoordinasikan program kerja kelompok bersama masyarakat.",
+      en: "Led KKN LT 69 as group leader, coordinating the team's community work programme.",
+    },
   },
 ];
 
-/** SLOT: lomba & prestasi. Kosong = tampil kartu placeholder. */
-// org dipakai untuk hasil/peran karena skema tidak punya field khusus
+/** Lomba & prestasi. org dipakai untuk hasil/peran; highlight = disorot di Journey. */
 export const achievements: SlotItem[] = [
   {
     period: "2026",
@@ -73,8 +90,8 @@ export const achievements: SlotItem[] = [
       en: "Data Slayer 4.0 — Machine Learning Competition (Kaggle)",
     },
     org: {
-      id: "Peserta (TODO: perbarui setelah final private leaderboard)",
-      en: "Participant (TODO: update after final private leaderboard)",
+      id: "Peserta · Berkontribusi dalam tim",
+      en: "Participant · Team contributor",
     },
     description: {
       id: "Deteksi kecurangan ujian dari video (klasifikasi biner, Macro-F1). Membangun pipeline klasifikasi video dengan PyTorch untuk submission tim.",
@@ -88,9 +105,10 @@ export const achievements: SlotItem[] = [
       en: "UI/UX Competition — MANIFEST 2026 (HMMI USK)",
     },
     org: {
-      id: "Ketua Tim (TODO: tambahkan peringkat jika ada)",
-      en: "Team Lead (TODO: add placement if any)",
+      id: "Juara 1 · Ketua Tim",
+      en: "1st Place · Team Lead",
     },
+    highlight: true,
     description: {
       id: "Memimpin tim ApapunSelainSkripsi merancang Meukat, platform pemulihan dan penggunaan ulang material bangunan sebelum pembongkaran (SDGs 11.6).",
       en: "Led team ApapunSelainSkripsi in designing Meukat, a platform for recovering and reusing construction materials before demolition (SDG 11.6).",

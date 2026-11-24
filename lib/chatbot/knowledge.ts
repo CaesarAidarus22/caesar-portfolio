@@ -5,7 +5,7 @@
  */
 import { getDictionary } from "@/lib/dictionary";
 import { projects } from "@/lib/projects";
-import { achievements, experience, site, type Locale, type SlotItem } from "@/lib/site";
+import { achievements, byRecent, experience, site, type Locale, type SlotItem } from "@/lib/site";
 
 /** Buang penanda TODO agar chatbot tidak pernah menyebut data yang belum diisi. */
 export function clean(value?: string) {
@@ -14,8 +14,9 @@ export function clean(value?: string) {
   return v && !/TODO/.test(v) ? v : undefined;
 }
 
+// urutan sama dengan tampilan Journey (highlight dulu, lalu terbaru)
 const slot = (items: SlotItem[], locale: Locale) =>
-  items
+  byRecent(items)
     .map((it) => ({
       title: clean(it.title[locale]),
       org: clean(it.org[locale]),

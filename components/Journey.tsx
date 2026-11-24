@@ -2,30 +2,32 @@
 
 import { useApp } from "./Providers";
 import { FadeUp, RevealLine, SectionLabel } from "./ui";
-import { achievements, experience, type SlotItem } from "@/lib/site";
+import { achievements, byRecent, experience, type SlotItem } from "@/lib/site";
 
-function Column({ title, items, slot }: { title: string; items: SlotItem[]; slot: string }) {
-  const { locale } = useApp();
+function Column({ title, items }: { title: string; items: SlotItem[] }) {
+  const { locale, t } = useApp();
   return (
     <div>
       <h3 className="label mb-4 !text-ink">{title}</h3>
       <ul className="border-t border-ink/20">
-        {items.length === 0
-          ? [0, 1].map((i) => (
-              <li key={i} className="my-3 rounded-xl border border-dashed border-ink/30 px-5 py-6 text-sm text-muted">
-                <span className="font-mono text-xs text-brand">0{i + 1}</span> — {slot}
-              </li>
-            ))
-          : items.map((it, i) => (
-              <FadeUp key={i} className="grid grid-cols-12 gap-3 border-b border-ink/20 py-6">
-                <span className="col-span-3 font-mono text-xs text-muted">{it.period}</span>
-                <div className="col-span-9">
-                  <div className="text-xl font-medium tracking-tight">{it.title[locale]}</div>
-                  <div className="text-sm text-muted">{it.org[locale]}</div>
-                  {it.description && <p className="mt-2 text-[15px] leading-relaxed">{it.description[locale]}</p>}
-                </div>
-              </FadeUp>
-            ))}
+        {byRecent(items).map((it, i) => (
+          <FadeUp key={i} className="grid grid-cols-12 gap-3 border-b border-ink/20 py-6">
+            {/* period kosong: kolom periode tidak dirender, judul memakai lebar penuh */}
+            {it.period !== "" && <span className="col-span-3 font-mono text-xs text-muted">{it.period}</span>}
+            <div className={it.period !== "" ? "col-span-9" : "col-span-12"}>
+              <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
+                <span className="text-xl font-medium tracking-tight">{it.title[locale]}</span>
+                {it.highlight && (
+                  <span className="rounded-full bg-brand px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-white">
+                    {t.journey.highlight}
+                  </span>
+                )}
+              </div>
+              <div className={`text-sm ${it.highlight ? "text-brand" : "text-muted"}`}>{it.org[locale]}</div>
+              {it.description && <p className="mt-2 text-[15px] leading-relaxed">{it.description[locale]}</p>}
+            </div>
+          </FadeUp>
+        ))}
       </ul>
     </div>
   );
@@ -40,8 +42,8 @@ export default function Journey() {
         <RevealLine>{t.journey.title}</RevealLine>
       </h2>
       <div className="mt-14 grid gap-14 md:grid-cols-2 md:gap-10">
-        <Column title={t.journey.experience} items={experience} slot={t.journey.slot} />
-        <Column title={t.journey.achievements} items={achievements} slot={t.journey.slot} />
+        <Column title={t.journey.experience} items={experience} />
+        <Column title={t.journey.achievements} items={achievements} />
       </div>
     </section>
   );
