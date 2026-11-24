@@ -154,7 +154,7 @@ const en: Dictionary = {
     label: "Journey",
     title: "Experience & Awards",
     experience: "Experience",
-    achievements: "Competitions & Awards",
+    achievements: "Competitions",
     slot: "Empty slot — fill it in lib/site.ts",
   },
   contact: {

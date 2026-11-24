@@ -41,3 +41,4 @@ PRODUCT.md
 
 # Dari v2
 *.tsbuildinfo
+.vercel
