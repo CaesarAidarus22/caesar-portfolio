@@ -1,37 +1,29 @@
 {
-  "name": "portofolio-caesar",
-  "version": "0.1.0",
+  "name": "caesar-portfolio-v2",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "screenshots": "node scripts/capture-screenshots.mjs",
-    "verify:images": "node scripts/verify-images.mjs",
-    "verify:sahamradar": "node scripts/verify-sahamradar.mjs"
+    "start": "next start"
   },
   "dependencies": {
-    "framer-motion": "^12.18.1",
-    "lucide-react": "^0.468.0",
-    "next": "15.5.19",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
-    "react-icons": "^5.7.0"
-  },
-  "overrides": {
-    "postcss": "^8.5.10"
+    "@fontsource-variable/inter-tight": "^5.3.0",
+    "@fontsource/instrument-serif": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "lenis": "^1.3.28",
+    "motion": "^14.14.0",
+    "next": "^15.5.19",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@types/node": "^22.10.2",
-    "@types/react": "^19.0.1",
-    "@types/react-dom": "^19.0.1",
-    "autoprefixer": "^10.4.20",
-    "eslint": "^9.16.0",
-    "eslint-config-next": "15.5.19",
-    "playwright-core": "^1.57.0",
-    "postcss": "^8.5.10",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "autoprefixer": "^10.7.0",
+    "postcss": "^8.5.33",
     "tailwindcss": "^3.4.16",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.3"
   }
 }

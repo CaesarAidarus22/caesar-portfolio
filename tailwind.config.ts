@@ -1,32 +1,27 @@
 import type { Config } from "tailwindcss";
 
-const config: Config = {
-  content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+export default {
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        background: "#050608",
-        surface: "#0B0F14",
-        card: "#111827",
-        primary: "#F8FAFC",
-        secondary: "#94A3B8",
-        accent: "#0645C4",
-        accentHover: "#2563EB",
+        // palet merah-putih-hitam (nama semantik)
+        base: "#FFFFFF", // latar utama
+        surface: "#FAF6F5", // latar kartu/section kedua
+        brand: "#D7261E", // merah utama
+        brandDeep: "#A3140E", // merah gelap untuk hover/kartu alternatif
+        blush: "#FCE9E7", // merah sangat muda untuk tint
+        ink: "#111111", // hitam teks dan kontras
+        muted: "#6B6363", // teks sekunder
+        line: "#EADCDA", // garis pemisah
       },
       fontFamily: {
-        display: ["var(--font-display)", "Space Grotesk", "Inter", "sans-serif"],
-        body: ["var(--font-body)", "Inter", "Arial", "sans-serif"],
+        serif: ['"Instrument Serif"', "Georgia", "serif"],
+        sans: ['"Inter Tight Variable"', "system-ui", "sans-serif"],
+        mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
       },
-      boxShadow: {
-        cinematic: "0 32px 90px rgba(0, 0, 0, 0.42)",
-        soft: "0 20px 60px rgba(0, 0, 0, 0.26)",
-      },
+      letterSpacing: { tightest: "-0.045em" },
     },
   },
   plugins: [],
-};
-
-export default config;
+} satisfies Config;

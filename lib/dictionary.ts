@@ -1,0 +1,175 @@
+import type { Locale } from "./site";
+
+const id = {
+  meta: {
+    title: "Caesar Aidarus — Machine Learning Engineer",
+    description:
+      "Portofolio Muhammad Caesar Aidarus, Machine Learning Engineer dari Banda Aceh. Computer vision, NLP, dan sistem ML yang siap dipakai.",
+  },
+  nav: { work: "Karya", about: "Tentang", capabilities: "Keahlian", journey: "Perjalanan", contact: "Kontak", menu: "Menu", close: "Tutup" },
+  status: { available: "Terbuka untuk freelance", local: "Waktu lokal" },
+  loader: { label: "Memuat portofolio" },
+  hero: {
+    role: "Machine Learning Engineer",
+    line1: "Membangun model",
+    line2: "yang benar-benar",
+    line3: "dipakai orang.",
+    sub: "Computer vision, NLP, dan sistem ML end-to-end, dari dataset sampai API dan antarmuka.",
+    github: "Lihat GitHub",
+    cv: "Unduh CV",
+    cvSoon: "CV segera hadir",
+    scroll: "Gulir",
+  },
+  about: {
+    label: "Tentang",
+    statement:
+      "Saya mahasiswa Artificial Intelligence di Universitas Syiah Kuala yang suka mengubah eksperimen di notebook menjadi produk kecil yang bisa dicoba siapa saja.",
+    bioSlot: "Slot bio singkat — isi di lib/site.ts (bio).",
+    facts: [
+      ["Basis", "Banda Aceh, Indonesia"],
+      ["Fokus", "Computer Vision · NLP · ML Systems"],
+      ["Studi", "Artificial Intelligence, USK"],
+      ["Bahasa", "Indonesia · English"],
+    ],
+  },
+  work: {
+    label: "Karya Terpilih",
+    title: "Proyek",
+    view: "Lihat proyek",
+    all: "proyek",
+  },
+  capabilities: {
+    label: "Keahlian",
+    title: "Yang bisa saya bantu",
+    items: [
+      { title: "Computer Vision", body: "Klasifikasi gambar, deteksi objek, dan face recognition dengan transfer learning serta pipeline inference yang ringan." },
+      { title: "NLP & Speech", body: "Pipeline bahasa end-to-end: transkripsi, normalisasi teks Indonesia, sentiment analysis, hingga integrasi LLM." },
+      { title: "ML ke Produksi", body: "Membungkus model menjadi API FastAPI yang punya fallback, validasi input, dan dokumentasi yang jelas." },
+      { title: "Full-stack Pendukung", body: "Antarmuka React/Next.js dan backend Express/Supabase agar model bisa langsung dicoba pengguna." },
+    ],
+  },
+  toolbox: { label: "Toolbox" },
+  journey: {
+    label: "Perjalanan",
+    title: "Pengalaman & Prestasi",
+    experience: "Pengalaman",
+    achievements: "Lomba & Prestasi",
+    slot: "Slot kosong — isi di lib/site.ts",
+  },
+  contact: {
+    label: "Kontak",
+    big1: "Ayo bangun",
+    big2: "sesuatu.",
+    sub: "Punya proyek ML, butuh model yang dibungkus jadi produk, atau sekadar ingin ngobrol? Kirim pesan.",
+    linkedin: "Kirim pesan di LinkedIn",
+    email: "Email",
+    copied: "Tersalin!",
+    socials: "Sosial",
+    back: "Kembali ke atas",
+    made: "Dibuat dengan Next.js & Motion",
+  },
+  project: {
+    back: "Semua proyek",
+    year: "Tahun",
+    role: "Peran",
+    stack: "Stack",
+    repo: "Repository",
+    openRepo: "Buka di GitHub",
+    problem: "Masalah",
+    solution: "Solusi",
+    architecture: "Arsitektur",
+    challenges: "Tantangan",
+    results: "Hasil",
+    lessons: "Pelajaran",
+    next: "Proyek berikutnya",
+    noImage: "Visual proyek segera ditambahkan",
+  },
+  notFound: { title: "Halaman tidak ditemukan", back: "Kembali ke beranda" },
+};
+
+export type Dictionary = typeof id;
+
+const en: Dictionary = {
+  meta: {
+    title: "Caesar Aidarus — Machine Learning Engineer",
+    description:
+      "Portfolio of Muhammad Caesar Aidarus, a machine learning engineer from Banda Aceh. Computer vision, NLP and production-ready ML systems.",
+  },
+  nav: { work: "Work", about: "About", capabilities: "Capabilities", journey: "Journey", contact: "Contact", menu: "Menu", close: "Close" },
+  status: { available: "Available for freelance", local: "Local time" },
+  loader: { label: "Loading portfolio" },
+  hero: {
+    role: "Machine Learning Engineer",
+    line1: "Building models",
+    line2: "that people",
+    line3: "actually use.",
+    sub: "Computer vision, NLP and end-to-end ML systems, from the dataset all the way to the API and interface.",
+    github: "View GitHub",
+    cv: "Download CV",
+    cvSoon: "CV coming soon",
+    scroll: "Scroll",
+  },
+  about: {
+    label: "About",
+    statement:
+      "I'm an Artificial Intelligence student at Universitas Syiah Kuala who likes turning notebook experiments into small products anyone can try.",
+    bioSlot: "Short bio slot — fill it in lib/site.ts (bio).",
+    facts: [
+      ["Based in", "Banda Aceh, Indonesia"],
+      ["Focus", "Computer Vision · NLP · ML Systems"],
+      ["Studying", "Artificial Intelligence, USK"],
+      ["Languages", "Indonesian · English"],
+    ],
+  },
+  work: { label: "Selected Work", title: "Projects", view: "View project", all: "projects" },
+  capabilities: {
+    label: "Capabilities",
+    title: "How I can help",
+    items: [
+      { title: "Computer Vision", body: "Image classification, object detection and face recognition with transfer learning and lightweight inference pipelines." },
+      { title: "NLP & Speech", body: "End-to-end language pipelines: transcription, Indonesian text normalisation, sentiment analysis and LLM integration." },
+      { title: "ML to Production", body: "Wrapping models into FastAPI services with fallbacks, input validation and clear documentation." },
+      { title: "Supporting Full-stack", body: "React/Next.js interfaces and Express/Supabase backends so users can try the model right away." },
+    ],
+  },
+  toolbox: { label: "Toolbox" },
+  journey: {
+    label: "Journey",
+    title: "Experience & Awards",
+    experience: "Experience",
+    achievements: "Competitions & Awards",
+    slot: "Empty slot — fill it in lib/site.ts",
+  },
+  contact: {
+    label: "Contact",
+    big1: "Let's build",
+    big2: "something.",
+    sub: "Got an ML project, need a model shipped as a product, or just want to chat? Send a message.",
+    linkedin: "Message me on LinkedIn",
+    email: "Email",
+    copied: "Copied!",
+    socials: "Socials",
+    back: "Back to top",
+    made: "Built with Next.js & Motion",
+  },
+  project: {
+    back: "All projects",
+    year: "Year",
+    role: "Role",
+    stack: "Stack",
+    repo: "Repository",
+    openRepo: "Open on GitHub",
+    problem: "Problem",
+    solution: "Solution",
+    architecture: "Architecture",
+    challenges: "Challenges",
+    results: "Results",
+    lessons: "Lessons",
+    next: "Next project",
+    noImage: "Project visual coming soon",
+  },
+  notFound: { title: "Page not found", back: "Back home" },
+};
+
+const dictionaries: Record<Locale, Dictionary> = { id, en };
+export const getDictionary = (locale: Locale) => dictionaries[locale] ?? id;
