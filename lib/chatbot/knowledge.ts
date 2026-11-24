@@ -19,7 +19,8 @@ const slot = (items: SlotItem[], locale: Locale) =>
   byRecent(items)
     .map((it) => ({
       title: clean(it.title[locale]),
-      org: clean(it.org[locale]),
+      // item highlight: label badge ("Juara 1") ikut disebut, karena tidak lagi ada di org
+      org: clean(it.highlight ? `${getDictionary(locale).journey.highlight} · ${it.org[locale]}` : it.org[locale]),
       period: clean(it.period),
       description: clean(it.description?.[locale]),
     }))

@@ -104,10 +104,7 @@ export const achievements: SlotItem[] = [
       id: "UI/UX Competition — MANIFEST 2026 (HMMI USK)",
       en: "UI/UX Competition — MANIFEST 2026 (HMMI USK)",
     },
-    org: {
-      id: "Juara 1 · Ketua Tim",
-      en: "1st Place · Team Lead",
-    },
+    org: { id: "Ketua Tim", en: "Team Lead" },
     highlight: true,
     description: {
       id: "Memimpin tim ApapunSelainSkripsi merancang Meukat, platform pemulihan dan penggunaan ulang material bangunan sebelum pembongkaran (SDGs 11.6).",
