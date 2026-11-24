@@ -46,6 +46,12 @@ const TOOLS: Tool[] = [
   { name: "Postman", icon: "siPostman" },
 ];
 
+// sel kosong bergaris putus-putus agar baris terakhir tetap rata bila jumlah tool tidak habis dibagi kolom
+const need = (cols: number) => (cols - (TOOLS.length % cols)) % cols;
+const FILLERS = Array.from({ length: Math.max(need(2), need(4), need(5)) }, (_, j) =>
+  [j < need(2) ? "block" : "hidden", j < need(4) ? "sm:block" : "sm:hidden", j < need(5) ? "lg:block" : "lg:hidden"].join(" "),
+);
+
 /** Logo monokrom (currentColor) atau monogram dalam lingkaran. */
 type IconMap = typeof ToolIcons | null;
 function ToolGlyph({ tool, icons, className = "" }: { tool: Tool; icons: IconMap; className?: string }) {
@@ -348,7 +354,8 @@ export default function Capabilities() {
         <div className="label mb-8">{t.toolbox.label}</div>
         <FadeUp>
           <ul
-            className="flex flex-wrap gap-2.5"
+            // grid kolom sama lebar: 2 / 4 / 5 kolom (20 tool → baris selalu penuh)
+            className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 lg:grid-cols-5"
             onPointerMove={(e) => {
               mx.set(e.clientX);
               my.set(e.clientY);
@@ -361,13 +368,17 @@ export default function Capabilities() {
                 // pill jadi merah saat hover → kursor putih agar tetap terlihat
                 data-theme="brand"
                 onPointerEnter={() => setActive(i)}
-                className="group flex items-center rounded-full border border-line px-4 py-2 text-[15px] transition-colors duration-300 hover:border-brand hover:bg-brand hover:text-white"
+                // font mengecil di 4 kolom (640–1023px) agar nama panjang tidak terpotong
+                className="group flex h-11 min-w-0 items-center justify-center whitespace-nowrap rounded-full border border-line px-3 text-[15px] transition-colors duration-300 hover:border-brand hover:bg-brand hover:text-white sm:text-[clamp(12px,1.6vw,15px)] lg:text-[15px]"
               >
                 <span className="tool-logo" aria-hidden>
                   <ToolGlyph tool={tool} icons={icons} />
                 </span>
                 {tool.name}
               </li>
+            ))}
+            {FILLERS.map((cls, j) => (
+              <li key={`kosong-${j}`} aria-hidden className={`h-11 rounded-full border border-dashed border-line ${cls}`} />
             ))}
           </ul>
         </FadeUp>
