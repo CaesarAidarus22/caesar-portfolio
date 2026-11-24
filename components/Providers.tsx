@@ -6,6 +6,7 @@ import { getDictionary, type Dictionary } from "@/lib/dictionary";
 import type { Locale } from "@/lib/site";
 import Preloader from "./Preloader";
 import Cursor from "./Cursor";
+import AskCaesar from "./AskCaesar";
 
 type Ctx = { locale: Locale; t: Dictionary; ready: boolean; lenis: Lenis | null };
 const AppContext = createContext<Ctx | null>(null);
@@ -54,6 +55,7 @@ export default function Providers({ locale, children }: { locale: Locale; childr
       <Preloader onDone={() => setReady(true)} />
       <Cursor />
       {children}
+      <AskCaesar />
     </AppContext.Provider>
   );
 }
