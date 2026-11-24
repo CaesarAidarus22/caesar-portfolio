@@ -217,16 +217,34 @@ a {
   font-weight: 600;
 }
 
+/* The grid pattern lives on an oversized ::before that drifts with transform
+   (compositor-only) instead of animating background-position (repaint every
+   frame). The pseudo-element extends one tile up/left, so the pattern stays
+   aligned to the element origin; the parent mask clips the overflow. */
 .cinematic-grid {
-  background-image:
-    linear-gradient(rgba(221, 225, 231, 0.052) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(221, 225, 231, 0.07) 1px, transparent 1px);
-  background-size: 80px 80px;
+  --grid-tile: 80px;
   mask-image:
     radial-gradient(circle at 72% 42%, rgba(0, 0, 0, 0.95), transparent 52%),
     linear-gradient(to bottom, rgba(0, 0, 0, 0.86), transparent 84%);
   opacity: 0.92;
+}
+
+.cinematic-grid::before {
+  position: absolute;
+  inset: calc(var(--grid-tile) * -1) 0 0 calc(var(--grid-tile) * -1);
+  content: "";
+  background-image:
+    linear-gradient(rgba(221, 225, 231, 0.052) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(221, 225, 231, 0.07) 1px, transparent 1px);
+  background-size: var(--grid-tile) var(--grid-tile);
   animation: grid-drift 24s linear infinite;
+}
+
+/* Pause every hero animation while the hero is scrolled out of view. */
+.home-hero--offscreen *,
+.home-hero--offscreen *::before,
+.home-hero--offscreen *::after {
+  animation-play-state: paused !important;
 }
 
 .hero-noise {
@@ -2685,11 +2703,11 @@ a.about-social__card:focus-visible .about-social__icon svg {
 
 @keyframes grid-drift {
   from {
-    background-position: 0 0, 0 0;
+    transform: translate3d(0, 0, 0);
   }
 
   to {
-    background-position: 80px 80px, 80px 80px;
+    transform: translate3d(var(--grid-tile), var(--grid-tile), 0);
   }
 }
 
@@ -3218,7 +3236,7 @@ a.about-social__card:focus-visible .about-social__icon svg {
     display: none;
   }
 
-  .cinematic-grid,
+  .cinematic-grid::before,
   .ai-companion__image,
   .about-page__ambient {
     animation: none;
@@ -3320,7 +3338,7 @@ a.about-social__card:focus-visible .about-social__icon svg {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cinematic-grid,
+  .cinematic-grid::before,
   .hero-spotlights span,
   .hero-streaks,
   .hero-light-sweep,
@@ -5042,11 +5060,13 @@ body:has(.home-page) ::selection {
 }
 
 .home-page .cinematic-grid {
+  opacity: 0.78;
+}
+
+.home-page .cinematic-grid::before {
   background-image:
     linear-gradient(rgba(113, 145, 184, 0.085) 1px, transparent 1px),
     linear-gradient(90deg, rgba(113, 145, 184, 0.085) 1px, transparent 1px);
-  background-size: 80px 80px;
-  opacity: 0.78;
 }
 
 .home-page .hero-depth {
@@ -5394,7 +5414,7 @@ body:has(.home-page) .command-group > button.is-selected { background: rgba(37, 
   }
 
   .home-page .cinematic-grid {
-    background-size: 64px 64px;
+    --grid-tile: 64px;
     opacity: 0.38;
   }
 
@@ -5420,7 +5440,7 @@ body:has(.home-page) .command-group > button.is-selected { background: rgba(37, 
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-page .cinematic-grid,
+  .home-page .cinematic-grid::before,
   .home-page .hero-spotlights span,
   .home-page .hero-streaks,
   .home-page .hero-light-sweep,

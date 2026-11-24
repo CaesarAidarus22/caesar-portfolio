@@ -1,10 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { ArrowUpRight, Github, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { featuredProjects, type Project, type ProjectAccent } from "@/app/data/projects";
 import GithubActivity from "./GithubActivity";
 import ContactSection from "./ContactSection";
@@ -138,10 +138,15 @@ function PortfolioImage({
 }
 
 function Hero() {
+  const heroRef = useRef<HTMLElement>(null);
+  // Starts true so SSR markup and the first paint keep animations running.
+  const heroInView = useInView(heroRef, { initial: true });
+
   return (
     <section
+      ref={heroRef}
       id="top"
-      className="home-hero relative isolate overflow-hidden px-5 pb-24 pt-32 sm:px-6 sm:pb-28 sm:pt-36 lg:min-h-screen lg:px-8 lg:pb-32"
+      className={`home-hero ${heroInView ? "" : "home-hero--offscreen"} relative isolate overflow-hidden px-5 pb-24 pt-32 sm:px-6 sm:pb-28 sm:pt-36 lg:min-h-screen lg:px-8 lg:pb-32`}
     >
       <div className="cinematic-grid pointer-events-none absolute inset-0 -z-20" />
       <div
