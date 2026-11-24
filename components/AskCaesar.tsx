@@ -11,6 +11,8 @@ import { EASE } from "./ui";
 
 const MAX_INPUT = 500;
 const MAX_QUESTIONS = 20; // per sesi (state; hilang saat reload)
+const AI_HISTORY = 10; // riwayat yang dikirim ke API
+const AI_TIMEOUT_MS = 16_000; // sedikit di atas timeout server (15 detik)
 
 type Message = { id: number; role: "assistant" | "user"; content: string; actions?: ChatAction[] };
 
@@ -42,6 +44,9 @@ export default function AskCaesar() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
+  const [aiMode, setAiMode] = useState(false);
+  const [pending, setPending] = useState(false);
+  const statusChecked = useRef(false);
   const context = useRef<ChatContext>({});
   const launcherRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -51,7 +56,18 @@ export default function AskCaesar() {
 
   const asked = messages.filter((m) => m.role === "user").length;
   const limitReached = asked >= MAX_QUESTIONS;
-  const label = a.launcher; // label jujur: tanpa "AI" selama mode AI tidak aktif
+  // label jujur: kata "AI" hanya muncul bila API melaporkan mode AI aktif
+  const label = aiMode ? a.launcherAi : a.launcher;
+
+  // cek status mode AI sekali, saat panel pertama kali dibuka
+  useEffect(() => {
+    if (!open || statusChecked.current) return;
+    statusChecked.current = true;
+    fetch("/api/chat/status", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : { ai: false }))
+      .then((d: { ai?: unknown }) => setAiMode(d.ai === true))
+      .catch(() => setAiMode(false));
+  }, [open]);
 
   // fokus ke input saat dibuka, kembali ke tombol saat ditutup
   useEffect(() => {
@@ -74,14 +90,39 @@ export default function AskCaesar() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: reduce ? "auto" : "smooth" });
   }, [messages, reduce]);
 
-  const ask = (raw: string) => {
-    const q = raw.trim().slice(0, MAX_INPUT);
-    if (!q || limitReached) return;
+  const answerByRules = (q: string, id: number) => {
     const res = generateResponse(q, locale, context.current);
     context.current = res.context;
+    setMessages((m) => [...m, { id, role: "assistant", content: res.text, actions: res.actions }]);
+  };
+
+  const ask = async (raw: string) => {
+    const q = raw.trim().slice(0, MAX_INPUT);
+    if (!q || limitReached || pending) return;
     const id = Date.now();
-    setMessages((m) => [...m, { id, role: "user", content: q }, { id: id + 1, role: "assistant", content: res.text, actions: res.actions }]);
+    const history = messages.slice(-AI_HISTORY).map(({ role, content }) => ({ role, content }));
+    setMessages((m) => [...m, { id, role: "user", content: q }]);
     setInput("");
+    if (!aiMode) return answerByRules(q, id + 1);
+
+    setPending(true);
+    try {
+      const r = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: q, locale, history }),
+        signal: AbortSignal.timeout(AI_TIMEOUT_MS),
+      });
+      const d = r.ok ? ((await r.json()) as { reply?: unknown }) : null;
+      if (typeof d?.reply !== "string" || !d.reply) throw new Error("fallback");
+      setMessages((m) => [...m, { id: id + 1, role: "assistant", content: d.reply as string }]);
+    } catch {
+      // gagal (tanpa key, error, timeout, kena limit): diam-diam pindah ke mode aturan
+      setAiMode(false);
+      answerByRules(q, id + 1);
+    } finally {
+      setPending(false);
+    }
   };
 
   const submit = (e: FormEvent) => {
@@ -164,8 +205,13 @@ export default function AskCaesar() {
                 <Avatar size="40px" />
               </span>
               <div className="min-w-0 flex-1">
-                <h2 id="ask-caesar-title" className="font-serif text-2xl leading-none">
+                <h2 id="ask-caesar-title" className="flex items-center gap-2 font-serif text-2xl leading-none">
                   {a.title}
+                  {aiMode && (
+                    <span className="rounded-full bg-white px-1.5 py-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.1em] text-brand">
+                      {a.aiBadge}
+                    </span>
+                  )}
                 </h2>
                 <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] opacity-95">{a.subtitle}</p>
               </div>
@@ -203,6 +249,11 @@ export default function AskCaesar() {
                   ) : null}
                 </Bubble>
               ))}
+              {pending && (
+                <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted" role="status">
+                  {a.thinking}
+                </p>
+              )}
               {messages.length === 0 && (
                 <div className="flex flex-wrap gap-2 pt-1">
                   {a.suggestions.map((s) => (
@@ -252,7 +303,7 @@ export default function AskCaesar() {
                 <button
                   type="submit"
                   aria-label={a.send}
-                  disabled={!input.trim() || limitReached}
+                  disabled={!input.trim() || limitReached || pending}
                   className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-ink text-white transition-colors hover:bg-brand disabled:opacity-30 disabled:hover:bg-ink"
                 >
                   <IconSend />
