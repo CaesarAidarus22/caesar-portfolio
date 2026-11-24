@@ -30,7 +30,8 @@ function SplitName({ text, delay, className = "" }: { text: string; delay: numbe
 function SpinBadge({ text }: { text: string }) {
 
   return (
-    <div className="relative h-28 w-28 rounded-full bg-base/80 backdrop-blur-sm md:h-32 md:w-32">
+    // ukuran mengikuti wrapper; latar solid + ring agar terbaca saat menempel di tepi foto
+    <div className="relative h-full w-full rounded-full bg-base ring-1 ring-line">
       <motion.svg viewBox="0 0 100 100" className="h-full w-full" animate={{ rotate: 360 }} transition={{ duration: 18, repeat: Infinity, ease: "linear" }}>
         <defs>
           <path id="circle" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" />
@@ -41,7 +42,7 @@ function SpinBadge({ text }: { text: string }) {
           </textPath>
         </text>
       </motion.svg>
-      <span className="absolute inset-0 m-auto flex h-10 w-10 items-center justify-center rounded-full bg-brand text-white">
+      <span className="absolute inset-0 m-auto flex h-[34%] w-[34%] items-center justify-center rounded-full bg-brand text-white">
         <Arrow className="rotate-90" />
       </span>
     </div>
@@ -121,10 +122,11 @@ export default function Hero() {
         >
           <span className="absolute inset-0 overflow-hidden rounded-full">
             <motion.span style={{ scale: imgScale }} className="absolute inset-0 block">
-              <Image src="/images/portrait-caesar.jpg" alt="" fill sizes="320px" className="object-cover object-[50%_30%]" priority />
+              <Image src="/images/portrait-caesar.jpg" alt="" fill sizes="320px" className="object-cover object-[50%_27%]" priority />
             </motion.span>
           </span>
-          <span className="absolute -right-[0.62em] -top-[0.78em] hidden text-[1rem]/6 md:block">
+          {/* badge di luar pill: pusatnya melewati pojok kanan atas, ukuran relatif terhadap font nama (em); tracking-normal agar letter-spacing negatif h1 tidak membalik teks SVG */}
+          <span className="absolute right-0 top-0 hidden h-[clamp(5.5rem,0.42em,8rem)] w-[clamp(5.5rem,0.42em,8rem)] translate-x-[55%] -translate-y-[60%] tracking-normal md:block">
             <SpinBadge text={t.status.available} />
           </span>
         </motion.span>
